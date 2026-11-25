@@ -6,23 +6,23 @@
   <title>혀기🐶 Archive - Calendar & Gallery</title>
   <style>
     :root {
-      --bg: #fffaf5;
+      --bg: #fff8f2;
       --card: #ffffff;
-      --orange: #ff7b29;
-      --orange-hover: #e86617;
-      --orange-soft: #fff0e5;
-      --text: #2b2623;
-      --muted: #9e9189;
-      --border: #f0e2d8;
+      --orange: #ff944d;
+      --orange-deep: #eb782d;
+      --orange-soft: #fff0e3;
+      --text: #2e2824;
+      --muted: #9a8d84;
+      --border: #f2e3d5;
     }
     * { box-sizing: border-box; }
     body {
       margin: 0;
       min-height: 100vh;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", "Apple SD Gothic Neo", sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", "Noto Sans SC", "Apple SD Gothic Neo", sans-serif;
       background: var(--bg);
       color: var(--text);
-      padding: 24px 16px 64px;
+      padding: 20px 14px 64px;
     }
     .container {
       max-width: 780px;
@@ -33,16 +33,16 @@
       flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
-      gap: 12px;
-      margin-bottom: 18px;
+      gap: 10px;
+      margin-bottom: 16px;
     }
     .back-link {
       text-decoration: none;
       color: var(--muted);
       font-weight: 700;
-      font-size: 0.92rem;
+      font-size: 0.9rem;
     }
-    .back-link:hover { color: var(--orange); }
+    .back-link:hover { color: var(--orange-deep); }
     .mode-switch {
       display: flex;
       gap: 8px;
@@ -54,7 +54,7 @@
       background: var(--card);
       color: var(--text);
       font-weight: 700;
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       cursor: pointer;
     }
     .mode-btn.active {
@@ -67,8 +67,8 @@
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 20px;
-      padding: 14px 18px;
-      margin-bottom: 18px;
+      padding: 12px 16px;
+      margin-bottom: 16px;
       display: flex;
       flex-wrap: wrap;
       align-items: center;
@@ -87,22 +87,22 @@
       background: #fffdfb;
       color: var(--text);
       font-weight: 700;
-      font-size: 0.85rem;
+      font-size: 0.84rem;
       cursor: pointer;
     }
     .year-pill.active {
       background: var(--orange-soft);
       border-color: var(--orange);
-      color: var(--orange);
+      color: var(--orange-deep);
     }
     .month-controls {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
     }
     .month-btn {
-      width: 34px;
-      height: 34px;
+      width: 32px;
+      height: 32px;
       border-radius: 10px;
       border: 1px solid var(--border);
       background: var(--card);
@@ -110,38 +110,34 @@
       font-weight: 800;
       cursor: pointer;
     }
-    .month-btn:hover {
-      border-color: var(--orange);
-      color: var(--orange);
-    }
     .month-label {
-      font-size: 1.05rem;
+      font-size: 1rem;
       font-weight: 800;
-      min-width: 110px;
+      min-width: 100px;
       text-align: center;
     }
 
-    /* 月曆樣式 */
+    /* 月曆 */
     .calendar-card {
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 24px;
-      padding: 20px;
-      box-shadow: 0 8px 24px rgba(255, 123, 41, 0.05);
+      padding: 18px;
+      box-shadow: 0 8px 24px rgba(255, 148, 77, 0.06);
     }
     .weekdays {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
       text-align: center;
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       font-weight: 700;
       color: var(--muted);
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
     .days-grid {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
-      gap: 8px;
+      gap: 7px;
     }
     .day-cell {
       aspect-ratio: 1 / 1;
@@ -150,29 +146,24 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      position: relative;
       font-weight: 700;
-      font-size: 0.95rem;
-      border: 1px solid transparent;
+      font-size: 0.92rem;
     }
     .day-cell.empty { background: transparent; }
     .day-cell.inactive {
-      color: #d4cbc5;
+      color: #d6ccc5;
       background: #fcfaf8;
-      cursor: default;
     }
     .day-cell.active {
       background: var(--orange-soft);
       color: var(--text);
-      border-color: #ffd1b3;
+      border: 1px solid #ffd4b3;
       text-decoration: none;
       cursor: pointer;
-      transition: transform 0.12s, background 0.15s;
     }
     .day-cell.active:hover {
       background: var(--orange);
       color: #fff;
-      transform: translateY(-2px);
     }
     .day-cell.birthday-day .day-num {
       display: inline-flex;
@@ -184,14 +175,14 @@
       width: 18px;
       height: 5px;
       border-radius: 999px;
-      background: #ff5e1a;
+      background: #ff7b29;
       margin-top: 3px;
     }
     .day-dots {
       display: flex;
       gap: 3px;
       margin-top: 4px;
-      height: 6px;
+      height: 5px;
     }
     .dot {
       width: 5px;
@@ -201,27 +192,27 @@
     }
     .day-cell.active:hover .dot { background: #fff; }
 
-    /* Gallery 雙分類媒體庫樣式 */
+    /* Gallery 雙分類 */
     .gallery-card {
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 24px;
-      padding: 20px;
-      box-shadow: 0 8px 24px rgba(255, 123, 41, 0.05);
+      padding: 18px;
+      box-shadow: 0 8px 24px rgba(255, 148, 77, 0.06);
     }
     .gallery-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 18px;
+      margin-bottom: 16px;
     }
     .gallery-month-badge {
-      font-size: 1.35rem;
+      font-size: 1.25rem;
       font-weight: 900;
       letter-spacing: 1px;
-      color: var(--orange);
+      color: var(--orange-deep);
       background: var(--orange-soft);
-      padding: 6px 16px;
+      padding: 5px 14px;
       border-radius: 12px;
     }
     .filter-tabs {
@@ -229,7 +220,7 @@
       gap: 8px;
     }
     .filter-btn {
-      padding: 7px 14px;
+      padding: 6px 13px;
       border-radius: 12px;
       border: 1.5px solid var(--border);
       background: #fffdfb;
@@ -242,6 +233,8 @@
       border-color: var(--orange);
       color: #fff;
     }
+
+    /* 桌機版 Gallery 網格 */
     .gallery-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(185px, 1fr));
@@ -287,40 +280,122 @@
       gap: 6px;
     }
     .tile-meta a {
-      color: var(--orange);
+      color: var(--orange-deep);
       text-decoration: none;
       font-weight: 700;
     }
+
+    /* 手機版專屬：純媒體 3 欄緊湊網格 */
+    @media (max-width: 768px) {
+      body { padding: 12px 8px 64px; }
+      .gallery-card {
+        padding: 12px;
+        border-radius: 18px;
+      }
+      .gallery-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 4px;
+      }
+      .media-tile {
+        border: none;
+        border-radius: 6px;
+        aspect-ratio: 1 / 1;
+        position: relative;
+      }
+      .media-tile img, .media-tile video {
+        width: 100%;
+        height: 100%;
+        aspect-ratio: 1 / 1;
+        border-radius: 6px;
+      }
+      .voice-tile {
+        height: 100%;
+        aspect-ratio: 1 / 1;
+        padding: 6px;
+        gap: 4px;
+      }
+      .voice-tile .voice-fname { display: none; }
+      .tile-meta { display: none; }
+    }
+
     .empty-msg {
       text-align: center;
       color: var(--muted);
       padding: 36px 12px;
-      font-size: 0.95rem;
+      font-size: 0.92rem;
     }
 
-    /* 燈箱放大 */
+    /* 燈箱與下載/跳轉列 */
     .lightbox {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.85);
+      background: rgba(14, 14, 16, 0.92);
       display: none;
+      flex-direction: column;
       align-items: center;
-      justify-content: center;
-      z-index: 99;
-      padding: 20px;
+      justify-content: space-between;
+      z-index: 120;
+      padding: 16px;
     }
     .lightbox.open { display: flex; }
-    .lightbox img, .lightbox video {
-      max-width: 92vw;
-      max-height: 86vh;
+    .lb-top {
+      width: 100%;
+      max-width: 680px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .lb-icon-btn {
+      background: rgba(255, 255, 255, 0.14);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 999px;
+      padding: 7px 14px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .lb-body {
+      flex: 1;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      padding: 12px 0;
+    }
+    .lb-body img, .lb-body video {
+      max-width: 94vw;
+      max-height: 74vh;
+      border-radius: 12px;
+      object-fit: contain;
+    }
+    .lb-bottom-info {
+      width: 100%;
+      max-width: 680px;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.2);
       border-radius: 14px;
+      padding: 11px 16px;
+      color: #ffffff;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+    .lb-bottom-info:hover {
+      background: var(--orange);
+      border-color: var(--orange);
     }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="top-bar">
-      <a class="back-link" href="years.html">← 年份與那年今日</a>
+      <a class="back-link" href="years.html">← Years</a>
       <div class="mode-switch">
         <button class="mode-btn active" id="btnCalendarMode">Calendar</button>
         <button class="mode-btn" id="btnGalleryMode">Gallery</button>
@@ -355,16 +430,25 @@
       <div class="gallery-header">
         <div class="gallery-month-badge" id="galleryMonthBadge">JAN</div>
         <div class="filter-tabs">
-          <button class="filter-btn active" data-group="solo" title="具本奕個人/自拍">🐶</button>
-          <button class="filter-btn" data-group="group" title="TEMPEST/隊友 (_t)">🌪️</button>
+          <button class="filter-btn active" data-group="solo" title="Solo (🐶)">🐶</button>
+          <button class="filter-btn" data-group="group" title="Group / Teammate (_t) (🌪️)">🌪️</button>
         </div>
       </div>
       <div class="gallery-grid" id="galleryGrid"></div>
     </section>
   </div>
 
+  <!-- 燈箱（含右上角下載符號與下方平台/日期跳轉列） -->
   <div class="lightbox" id="lightbox" onclick="closeLightbox()">
-    <div id="lightboxInner" onclick="event.stopPropagation()"></div>
+    <div class="lb-top" onclick="event.stopPropagation()">
+      <button class="lb-icon-btn" onclick="closeLightbox()">✕</button>
+      <a class="lb-icon-btn" id="lbDownloadBtn" download title="下載">↓</a>
+    </div>
+    <div class="lb-body" id="lightboxInner" onclick="event.stopPropagation()"></div>
+    <a class="lb-bottom-info" id="lbDayLink" href="#" onclick="event.stopPropagation()">
+      <span id="lbMetaText"></span>
+      <span>›</span>
+    </a>
   </div>
 
   <script>
@@ -372,12 +456,12 @@
     const params = new URLSearchParams(window.location.search);
 
     let currentYear = Number(params.get('year')) || 2026;
-    let currentMonth = Number(params.get('month')) || 1; // 1~12
+    let currentMonth = Number(params.get('month')) || 1;
     let currentMode = params.get('view') === 'gallery' ? 'gallery' : 'calendar';
-    let currentGroup = 'solo'; // 'solo' (🐶) 或 'group' (🌪️)
+    let currentGroup = 'solo';
 
     let archiveData = { bubble: [], sns: [], media: [] };
-    let dateActivityMap = {}; // '260117' -> Set(['bubble','sns','media'])
+    let dateActivityMap = {};
 
     const daysGrid = document.getElementById('daysGrid');
     const galleryGrid = document.getElementById('galleryGrid');
@@ -388,11 +472,20 @@
     const btnCalendarMode = document.getElementById('btnCalendarMode');
     const btnGalleryMode = document.getElementById('btnGalleryMode');
 
+    function normDate(d) {
+      return String(d || '').replace(/\D/g, '').trim();
+    }
+
+    function formatDotDate(yymmdd) {
+      if (!/^\d{6}$/.test(yymmdd)) return yymmdd;
+      return `${yymmdd.slice(0, 2)}.${yymmdd.slice(2, 4)}.${yymmdd.slice(4, 6)}`;
+    }
+
     function buildActivityMap() {
       dateActivityMap = {};
       ['bubble', 'sns', 'media'].forEach(cat => {
         (archiveData[cat] || []).forEach(item => {
-          const d = String(item.date || '').trim();
+          const d = normDate(item.date);
           if (!d) return;
           if (!dateActivityMap[d]) dateActivityMap[d] = new Set();
           dateActivityMap[d].add(cat);
@@ -401,7 +494,6 @@
     }
 
     function isGroupMedia(filename) {
-      // 檔名結尾含 _t（例如 xxx_t.jpg、xxx_t.mp4）歸為 🌪️ 團體/隊友
       const clean = String(filename || '').split('/').pop().toLowerCase();
       return /_t\.[a-z0-9]+$/.test(clean);
     }
@@ -418,20 +510,21 @@
     }
 
     function collectMonthMedia(yy, mm) {
-      const prefix = yy + mm; // 例如 '2601'
+      const prefix = yy + mm;
       const collected = [];
 
       // 1. Bubble 媒體 / 語音
-      (archiveData.bubble || []).forEach(item => {
-        const d = String(item.date || '');
+      (archiveData.bubble || []).forEach((item, idx) => {
+        const d = normDate(item.date);
         if (!d.startsWith(prefix)) return;
         const asset = item.asset || (['image', 'voice', 'video'].includes(item.type) ? item.text_ko : '');
         if (!asset) return;
-        const filename = asset.split('/').pop();
+        const filename = String(asset).split('/').pop();
         const kind = item.type === 'voice' ? 'voice' : guessMediaKind(asset);
         collected.push({
           date: d,
-          source: `Bubble · ${item.time || ''}`,
+          order: idx,
+          sourceLabel: 'Bubble',
           filename,
           path: asset,
           kind,
@@ -439,17 +532,18 @@
         });
       });
 
-      // 2. SNS 貼文與限動（Story）媒體
-      (archiveData.sns || []).forEach(post => {
-        const d = String(post.date || '');
+      // 2. SNS 貼文與限動媒體
+      (archiveData.sns || []).forEach((post, idx) => {
+        const d = normDate(post.date);
         if (!d.startsWith(prefix)) return;
         const paths = post.media_paths && post.media_paths.length ? post.media_paths : (post.media || []);
-        paths.forEach(p => {
+        paths.forEach((p, pIdx) => {
           if (!p) return;
-          const filename = p.split('/').pop();
+          const filename = String(p).split('/').pop();
           collected.push({
             date: d,
-            source: post.platform || 'SNS',
+            order: 10000 + idx * 50 + pIdx,
+            sourceLabel: post.platform || 'SNS',
             filename,
             path: p,
             kind: guessMediaKind(p),
@@ -458,10 +552,15 @@
         });
       });
 
-      // 去重（同日期同檔名同來源）
+      // 嚴格依日期由舊到新（升冪）排序，同日維持原順序
+      collected.sort((a, b) => {
+        if (a.date !== b.date) return a.date.localeCompare(b.date);
+        return a.order - b.order;
+      });
+
       const seen = new Set();
       return collected.filter(entry => {
-        const key = `${entry.date}_${entry.filename}_${entry.source}`;
+        const key = `${entry.date}_${entry.filename}_${entry.sourceLabel}`;
         if (seen.has(key)) return false;
         seen.add(key);
         return true;
@@ -498,19 +597,19 @@
         const cats = dateActivityMap[yymmdd];
         const isActive = Boolean(cats && cats.size > 0);
         const isBirthday = (currentMonth === 4 && d === 17);
+        const bClass = isBirthday ? ' birthday-day' : '';
 
-        const birthdayClass = isBirthday ? ' birthday-day' : '';
         if (isActive) {
           const dotsHtml = Array.from(cats).map(() => `<span class="dot"></span>`).join('');
           html += `
-            <a class="day-cell active${birthdayClass}" href="day.html?date=${yymmdd}">
+            <a class="day-cell active${bClass}" href="day.html?date=${yymmdd}">
               <span class="day-num">${d}</span>
               <div class="day-dots">${dotsHtml}</div>
             </a>
           `;
         } else {
           html += `
-            <div class="day-cell inactive${birthdayClass}">
+            <div class="day-cell inactive${bClass}">
               <span class="day-num">${d}</span>
             </div>
           `;
@@ -523,43 +622,78 @@
       const yy = String(currentYear).slice(-2);
       const mm = String(currentMonth).padStart(2, '0');
       const allMonthMedia = collectMonthMedia(yy, mm);
-
       const filtered = allMonthMedia.filter(item =>
         currentGroup === 'group' ? item.isGroup : !item.isGroup
       );
 
       if (!filtered.length) {
-        galleryGrid.innerHTML = `<div class="empty-msg" style="grid-column:1/-1;">${currentYear}年${currentMonth}月此分類目前沒有媒體檔案</div>`;
+        galleryGrid.innerHTML = `<div class="empty-msg" style="grid-column:1/-1;">${currentYear}.${mm} — Empty</div>`;
         return;
       }
 
       galleryGrid.innerHTML = filtered.map(item => {
+        const payload = encodeURIComponent(JSON.stringify({
+          kind: item.kind,
+          path: item.path,
+          filename: item.filename,
+          sourceLabel: item.sourceLabel,
+          date: item.date
+        }));
+
         let visualHtml = '';
         if (item.kind === 'video') {
-          visualHtml = `<video src="${escapeAttr(item.path)}" controls preload="metadata" onclick="openLightbox('video', '${escapeAttr(item.path)}')"></video>`;
+          visualHtml = `<video src="${escapeAttr(item.path)}" preload="metadata" onclick="openLightboxByPayload('${payload}')"></video>`;
         } else if (item.kind === 'voice') {
           visualHtml = `
-            <div class="voice-tile">
-              <div style="font-size:1.4rem;">🎙️</div>
-              <div style="font-size:0.78rem; color:#6e5d53; word-break:break-all;">${escapeHtml(item.filename)}</div>
-              <audio src="${escapeAttr(item.path)}" controls></audio>
+            <div class="voice-tile" onclick="openLightboxByPayload('${payload}')">
+              <div style="font-size:1.35rem;">🎙️</div>
+              <div class="voice-fname" style="font-size:0.75rem; color:#6e5d53; word-break:break-all;">${escapeHtml(item.filename)}</div>
+              <audio src="${escapeAttr(item.path)}" controls onclick="event.stopPropagation()"></audio>
             </div>
           `;
         } else {
-          visualHtml = `<img src="${escapeAttr(item.path)}" loading="lazy" alt="${escapeAttr(item.filename)}" onclick="openLightbox('image', '${escapeAttr(item.path)}')" />`;
+          visualHtml = `<img src="${escapeAttr(item.path)}" loading="lazy" alt="" onclick="openLightboxByPayload('${payload}')" />`;
         }
 
         return `
           <div class="media-tile">
             ${visualHtml}
             <div class="tile-meta">
-              <span>${escapeHtml(item.date)} · ${escapeHtml(item.source)}</span>
-              <a href="day.html?date=${escapeAttr(item.date)}">當日</a>
+              <span>${escapeHtml(formatDotDate(item.date))} · ${escapeHtml(item.sourceLabel)}</span>
+              <a href="day.html?date=${escapeAttr(item.date)}">Day</a>
             </div>
           </div>
         `;
       }).join('');
     }
+
+    window.openLightboxByPayload = function(encoded) {
+      const item = JSON.parse(decodeURIComponent(encoded));
+      const inner = document.getElementById('lightboxInner');
+      const dlBtn = document.getElementById('lbDownloadBtn');
+      const dayLink = document.getElementById('lbDayLink');
+      const metaText = document.getElementById('lbMetaText');
+
+      if (item.kind === 'video') {
+        inner.innerHTML = `<video src="${escapeAttr(item.path)}" controls autoplay></video>`;
+      } else if (item.kind === 'voice') {
+        inner.innerHTML = `<div style="background:#fff0e3; padding:24px; border-radius:18px; text-align:center;"><div style="font-size:2rem; margin-bottom:10px;">🎙️</div><audio src="${escapeAttr(item.path)}" controls autoplay></audio></div>`;
+      } else {
+        inner.innerHTML = `<img src="${escapeAttr(item.path)}" alt="" />`;
+      }
+
+      dlBtn.href = item.path;
+      dlBtn.setAttribute('download', item.filename || 'media');
+      metaText.textContent = `${item.sourceLabel} • ${formatDotDate(item.date)}`;
+      dayLink.href = `day.html?date=${item.date}`;
+
+      document.getElementById('lightbox').classList.add('open');
+    };
+
+    window.closeLightbox = function() {
+      document.getElementById('lightbox').classList.remove('open');
+      document.getElementById('lightboxInner').innerHTML = '';
+    };
 
     function renderAll() {
       renderHeaderState();
@@ -567,26 +701,11 @@
       else renderGallery();
     }
 
-    function openLightbox(kind, src) {
-      const inner = document.getElementById('lightboxInner');
-      if (kind === 'video') {
-        inner.innerHTML = `<video src="${src}" controls autoplay></video>`;
-      } else {
-        inner.innerHTML = `<img src="${src}" alt="preview" />`;
-      }
-      document.getElementById('lightbox').classList.add('open');
-    }
-
-    function closeLightbox() {
-      document.getElementById('lightbox').classList.remove('open');
-      document.getElementById('lightboxInner').innerHTML = '';
-    }
-
     function escapeHtml(s) {
-      return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
     }
     function escapeAttr(s) {
-      return String(s).replace(/"/g, '&quot;');
+      return String(s || '').replace(/"/g, '&quot;');
     }
 
     document.querySelectorAll('.year-pill').forEach(btn => {
@@ -621,7 +740,7 @@
 
     btnGalleryMode.addEventListener('click', () => {
       currentMode = 'gallery';
-      currentGroup = 'solo'; // 切進 Gallery 預設優先呈現 🐶
+      currentGroup = 'solo';
       document.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('active', b.dataset.group === 'solo'));
       renderAll();
     });

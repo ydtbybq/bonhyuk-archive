@@ -6,40 +6,38 @@
   <title>혀기🐶 Archive - Daily Log</title>
   <style>
     :root {
-      --bg: #fffaf5;
+      --bg: #fff8f2;
       --card: #ffffff;
-      --orange: #ff7b29;
-      --orange-soft: #fff0e5;
-      --text: #2b2623;
-      --muted: #8c7f77;
-      --border: #f0e2d8;
+      --orange: #ff944d;
+      --orange-deep: #eb782d;
+      --orange-soft: #fff0e3;
+      --text: #2e2824;
+      --muted: #96887f;
+      --border: #f2e3d5;
     }
     * { box-sizing: border-box; }
     body {
       margin: 0;
       min-height: 100vh;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", "Apple SD Gothic Neo", sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", "Noto Sans SC", "Apple SD Gothic Neo", sans-serif;
       background: var(--bg);
       color: var(--text);
-      padding: 20px 16px 96px;
+      padding: 20px 14px 96px;
     }
     .container {
       max-width: 720px;
       margin: 0 auto;
     }
     .day-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
     .day-title {
-      font-size: 1.35rem;
+      font-size: 1.3rem;
       font-weight: 900;
       color: var(--text);
     }
 
-    /* 純表情符號分頁列 */
+    /* 純表情符號分頁列（淺橘色調） */
     .emoji-tabs {
       display: flex;
       gap: 10px;
@@ -47,27 +45,26 @@
     }
     .emoji-tab {
       flex: 1;
-      padding: 11px 0;
+      padding: 10px 0;
       border-radius: 16px;
-      border: 1.5px solid var(--border);
-      background: var(--card);
-      font-size: 1.35rem;
+      border: 1.5px solid #ffd4b3;
+      background: var(--orange-soft);
+      font-size: 1.3rem;
       cursor: pointer;
       transition: all 0.15s;
     }
     .emoji-tab.active {
       background: var(--orange);
       border-color: var(--orange);
-      transform: translateY(-1px);
-      box-shadow: 0 6px 14px rgba(255, 123, 41, 0.25);
+      box-shadow: 0 5px 14px rgba(255, 148, 77, 0.28);
     }
 
-    /* 🫧 Bubble 樣式：每一則上方都保留 artist 혀기🐶 */
+    /* 🫧 Bubble：每則保留 artist 혀기🐶 徽章底色 */
     .bubble-row {
       display: flex;
       align-items: flex-start;
       gap: 10px;
-      margin-bottom: 14px;
+      margin-bottom: 15px;
     }
     .bubble-avatar {
       width: 42px;
@@ -75,18 +72,25 @@
       border-radius: 50%;
       object-fit: cover;
       flex-shrink: 0;
-      border: 1.5px solid #ffd1b3;
-      background: #ffe8d6;
+      border: 1.5px solid #ffd4b3;
+      background: var(--orange-soft);
     }
     .bubble-main {
       flex: 1;
       min-width: 0;
     }
-    .bubble-artist {
-      font-size: 0.78rem;
-      font-weight: 700;
-      color: var(--muted);
-      margin-bottom: 4px;
+    .artist-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: var(--orange-soft);
+      border: 1px solid #ffd4b3;
+      color: #8c4d20;
+      font-size: 0.74rem;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 999px;
+      margin-bottom: 5px;
     }
     .bubble-line {
       display: flex;
@@ -99,7 +103,7 @@
       border: 1px solid var(--border);
       border-radius: 4px 16px 16px 16px;
       padding: 10px 14px;
-      max-width: 85%;
+      max-width: 84%;
       box-shadow: 0 3px 10px rgba(0,0,0,0.02);
     }
     .bubble-time {
@@ -116,50 +120,114 @@
       font-size: 0.85rem;
     }
 
-    /* 💭 SNS 卡片樣式 */
+    /* 泡泡無框媒體 / 翻譯區塊 */
+    .standalone-media-wrap {
+      max-width: 78%;
+    }
+    .standalone-media-img {
+      max-width: 240px;
+      width: 100%;
+      border-radius: 14px;
+      display: block;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    }
+    .standalone-media-video {
+      max-width: 260px;
+      width: 100%;
+      border-radius: 14px;
+      display: block;
+    }
+    .standalone-audio {
+      max-width: 260px;
+      width: 100%;
+      display: block;
+    }
+    .media-trans-card {
+      margin-top: 6px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 9px 13px;
+    }
+
+    /* 泡泡直播平台按鈕與內嵌播放器 */
+    .live-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 8px;
+      padding: 6px 12px;
+      border-radius: 10px;
+      border: none;
+      font-size: 0.82rem;
+      font-weight: 800;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .live-btn.yt {
+      background: #FF0000;
+      color: #ffffff;
+    }
+    .live-btn.bili {
+      background: #FB7298;
+      color: #ffffff;
+    }
+    .embed-player-box {
+      margin-top: 10px;
+      border-radius: 12px;
+      overflow: hidden;
+      aspect-ratio: 16 / 9;
+      background: #000;
+    }
+    .embed-player-box iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    /* 💭 SNS：框外左上標頭 + 卡片本體 */
+    .sns-block {
+      margin-bottom: 18px;
+    }
+    .sns-outside-header {
+      margin-bottom: 6px;
+      padding-left: 2px;
+    }
+    .platform-badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 800;
+    }
     .sns-card {
       background: var(--card);
       border: 1.5px solid var(--border);
       border-radius: 18px;
-      padding: 16px;
-      margin-bottom: 14px;
-      position: relative;
-    }
-    .sns-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 10px;
-    }
-    .platform-badge {
-      display: inline-block;
-      padding: 4px 10px;
-      border-radius: 999px;
-      font-size: 0.8rem;
-      font-weight: 800;
+      padding: 15px;
     }
     .text-ko {
-      font-size: 0.95rem;
-      line-height: 1.6;
+      font-size: 0.94rem;
+      line-height: 1.58;
       white-space: pre-line;
       word-break: break-word;
     }
     .text-zh {
-      font-size: 0.95rem;
-      line-height: 1.6;
+      font-size: 0.94rem;
+      line-height: 1.58;
       white-space: pre-line;
       word-break: break-word;
       font-weight: 500;
     }
     .sns-divider {
       border: none;
-      border-top: 1px dashed var(--border);
-      margin: 10px 0;
+      border-top: 1px dashed #e5d4c6;
+      margin: 9px 0;
     }
 
     /* 5 行長文折疊 */
     .collapsible-text {
-      position: relative;
       display: -webkit-box;
       -webkit-box-orient: vertical;
       -webkit-line-clamp: 5;
@@ -173,26 +241,98 @@
     .more-btn {
       background: none;
       border: none;
-      color: var(--orange);
-      font-weight: 700;
-      font-size: 0.84rem;
+      color: var(--orange-deep);
+      font-weight: 800;
+      font-size: 0.82rem;
       padding: 4px 0 0;
       cursor: pointer;
     }
 
-    .media-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 8px;
+    /* SNS 左右滑動輪播 */
+    .carousel-wrap {
+      position: relative;
       margin-top: 10px;
+      border-radius: 14px;
+      overflow: hidden;
+      background: #f6ede6;
     }
-    .media-grid img, .media-grid video {
+    .carousel-track {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      scrollbar-width: none;
+    }
+    .carousel-track::-webkit-scrollbar { display: none; }
+    .carousel-slide {
+      flex: 0 0 100%;
+      scroll-snap-align: start;
+    }
+    .carousel-slide img, .carousel-slide video {
       width: 100%;
-      height: 170px;
+      max-height: 360px;
       object-fit: cover;
-      border-radius: 12px;
-      background: #f5ece6;
+      display: block;
+      cursor: pointer;
     }
+    .carousel-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(0, 0, 0, 0.45);
+      color: #fff;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .carousel-nav.prev { left: 8px; }
+    .carousel-nav.next { right: 8px; }
+    .carousel-counter {
+      position: absolute;
+      right: 10px;
+      bottom: 8px;
+      background: rgba(0, 0, 0, 0.55);
+      color: #fff;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 999px;
+    }
+
+    /* Reply / Quote 收合區塊 */
+    .replies-box {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(0, 0, 0, 0.06);
+    }
+    .reply-toggle-btn {
+      background: rgba(255, 255, 255, 0.7);
+      border: 1px solid var(--border);
+      color: #6e5d53;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 5px 11px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    .reply-list {
+      display: none;
+      margin-top: 8px;
+      padding-left: 10px;
+      border-left: 2.5px solid var(--orange);
+    }
+    .reply-list.open { display: block; }
+    .reply-subcard {
+      background: rgba(255, 255, 255, 0.78);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 12px;
+      margin-bottom: 8px;
+    }
+
     .sns-footer {
       display: flex;
       justify-content: flex-end;
@@ -200,28 +340,26 @@
     }
     .dog-link-btn {
       text-decoration: none;
-      font-size: 1.15rem;
+      font-size: 1.1rem;
       background: var(--orange-soft);
-      border: 1px solid #ffd1b3;
+      border: 1px solid #ffd4b3;
       border-radius: 10px;
-      padding: 4px 10px;
-      transition: transform 0.12s;
+      padding: 3px 10px;
     }
-    .dog-link-btn:hover { transform: scale(1.08); }
 
-    /* 🎞️ Media 列表樣式 */
+    /* 🎞️ Media 列表 */
     .media-item-card {
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 18px;
-      padding: 16px;
+      padding: 15px;
       margin-bottom: 12px;
     }
     .media-item-head {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      gap: 8px;
+      gap: 7px;
       margin-bottom: 8px;
     }
     .type-tag {
@@ -250,29 +388,31 @@
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-      margin-top: 12px;
+      margin-top: 11px;
     }
     .p-btn {
       text-decoration: none;
+      border: none;
       padding: 6px 12px;
       border-radius: 10px;
       font-size: 0.82rem;
       font-weight: 700;
       color: #ffffff;
+      cursor: pointer;
     }
-    .p-btn.wb { color: #1f1b18; } /* 微博黃底配深色字較清晰 */
+    .p-btn.wb { color: #1f1b18; }
 
-    /* 底部固定導覽列：Previous / Calendar / Next */
+    /* 底部導覽列 */
     .bottom-nav {
       position: fixed;
       bottom: 0;
       left: 0;
       right: 0;
-      background: rgba(255, 250, 245, 0.94);
+      background: rgba(255, 248, 242, 0.95);
       backdrop-filter: blur(8px);
       border-top: 1px solid var(--border);
-      padding: 12px 16px;
-      z-index: 20;
+      padding: 11px 14px;
+      z-index: 30;
     }
     .bottom-nav-inner {
       max-width: 720px;
@@ -290,7 +430,7 @@
       background: var(--card);
       color: var(--text);
       font-weight: 800;
-      font-size: 0.9rem;
+      font-size: 0.88rem;
     }
     .nav-action-btn.disabled {
       opacity: 0.35;
@@ -298,15 +438,34 @@
     }
     .nav-action-btn.cal-btn {
       background: var(--orange-soft);
-      border-color: #ffd1b3;
-      color: var(--orange);
+      border-color: #ffd4b3;
+      color: var(--orange-deep);
+    }
+
+    /* 圖片放大燈箱 */
+    .img-zoom-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.88);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 150;
+      padding: 16px;
+    }
+    .img-zoom-modal.open { display: flex; }
+    .img-zoom-modal img {
+      max-width: 94vw;
+      max-height: 88vh;
+      border-radius: 12px;
+      object-fit: contain;
     }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="day-header">
-      <div class="day-title" id="dayTitle">2026.01.01</div>
+      <div class="day-title" id="dayTitle">2026.01.17</div>
     </div>
 
     <div class="emoji-tabs" id="emojiTabs"></div>
@@ -316,21 +475,55 @@
   <nav class="bottom-nav">
     <div class="bottom-nav-inner">
       <a class="nav-action-btn disabled" id="prevDayBtn" href="#">Previous</a>
-      <a class="nav-action-btn cal-btn" id="calReturnBtn" href="years.html">Calendar</a>
+      <a class="nav-action-btn cal-btn" id="calReturnBtn" href="calendar.html">Calendar</a>
       <a class="nav-action-btn disabled" id="nextDayBtn" href="#">Next</a>
     </div>
   </nav>
 
+  <div class="img-zoom-modal" id="imgZoomModal" onclick="this.classList.remove('open')">
+    <img id="imgZoomTarget" src="" alt="" onclick="event.stopPropagation()" />
+  </div>
+
   <script>
     const params = new URLSearchParams(window.location.search);
-    const targetDate = params.get('date') || '260101';
+    const targetDate = normDate(params.get('date') || '260117');
     const userNick = localStorage.getItem('bh_nickname') || 'iE';
+    const userLang = localStorage.getItem('bh_lang') || 'original'; // 'original' | 'zh-TW' | 'zh-CN'
 
     let archiveData = { bubble: [], sns: [], media: [] };
-    let profileList = [
-      '250222', '250401', '250413', '251123', '260331', '260403'
-    ];
+    const profileList = ['250222', '250401', '250413', '251123', '260331', '260403'];
     let activeTab = null;
+
+    // 繁簡轉換對照表（針對常見字彙做雙向轉換）
+    const T2S_MAP = {
+      '推薦':'推荐','練習':'练习','禮物':'礼物','喜歡':'喜欢','視訊':'视频','說':'说','開':'开',
+      '見':'见','這':'这','麼':'么','個':'个','為':'为','來':'来','會':'会','讓':'让','對':'对',
+      '時':'时','後':'后','國':'国','韓':'韩','語':'语','華':'华','學':'学','聽':'听','寫':'写',
+      '讀':'读','畫':'画','圖':'图','機':'机','電':'电','話':'话','愛':'爱','樂':'乐','歡':'欢',
+      '點':'点','關':'关','發':'发','進':'进','過':'过','還':'还','從':'从','給':'给','與':'与',
+      '當':'当','經':'经','現':'现','實':'实','體':'体','樣':'样','種':'种','類':'类','題':'题',
+      '問':'问','聲':'声','臉':'脸','眼':'眼','頭':'头','腳':'脚','動':'动','跑':'跑','走':'走',
+      '睡':'睡','覺':'觉','餓':'饿','冷':'冷','熱':'热','風':'风','雲':'云','星':'星','夢':'梦',
+      '謝':'谢','請':'请','幫':'帮','忙':'忙','準':'准','備':'备','結':'结','束':'束','開始':'开始',
+      '濾鏡':'滤镜','粉絲':'粉丝','成員':'成员','直播':'直播','應援':'应援','簽售':'签售'
+    };
+    const S2T_MAP = Object.fromEntries(Object.entries(T2S_MAP).map(([t, s]) => [s, t]));
+
+    function convertChinese(text, targetLang) {
+      const str = String(text || '');
+      if (!str) return '';
+      if (targetLang === 'zh-CN') {
+        return Array.from(str).map(ch => T2S_MAP[ch] || ch).join('');
+      }
+      if (targetLang === 'zh-TW') {
+        return Array.from(str).map(ch => S2T_MAP[ch] || ch).join('');
+      }
+      return str;
+    }
+
+    function normDate(d) {
+      return String(d || '').replace(/\D/g, '').trim();
+    }
 
     function formatDisplayDate(yymmdd) {
       if (!/^\d{6}$/.test(yymmdd)) return yymmdd;
@@ -342,7 +535,6 @@
     }
 
     function getAvatarForDate(yymmdd) {
-      // 找小於或等於當日日期的最新頭像檔名
       let chosen = profileList[0];
       for (const pDate of profileList) {
         if (pDate <= yymmdd) chosen = pDate;
@@ -350,18 +542,191 @@
       return `profile/profile_${chosen}.jpg`;
     }
 
+    function isMediaFilenameText(txt) {
+      const s = String(txt || '').trim().toLowerCase();
+      if (!s) return false;
+      if (s.includes('\n')) return false;
+      return /\.(jpg|jpeg|png|gif|webp|mp4|mp3|wav|m4a|ogg)$/.test(s);
+    }
+
+    function extractUrl(text) {
+      const match = String(text || '').match(/https?:\/\/[^\s]+/i);
+      return match ? match[0] : '';
+    }
+
+    function toYoutubeEmbedUrl(url) {
+      if (!url) return '';
+      let vid = '';
+      const shortMatch = url.match(/youtu\.be\/([a-zA-Z0-9_-]{6,})/);
+      const watchMatch = url.match(/[?&]v=([a-zA-Z0-9_-]{6,})/);
+      const liveMatch = url.match(/youtube\.com\/live\/([a-zA-Z0-9_-]{6,})/);
+      if (shortMatch) vid = shortMatch[1];
+      else if (watchMatch) vid = watchMatch[1];
+      else if (liveMatch) vid = liveMatch[1];
+      return vid ? `https://www.youtube.com/embed/${vid}` : '';
+    }
+
+    window.toggleEmbedPlayer = function(boxId, embedUrl) {
+      const box = document.getElementById(boxId);
+      if (!box) return;
+      if (box.style.display === 'block') {
+        box.style.display = 'none';
+        box.innerHTML = '';
+      } else {
+        box.style.display = 'block';
+        box.innerHTML = `<iframe src="${escapeAttr(embedUrl)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+      }
+    };
+
+    window.zoomImage = function(src) {
+      const modal = document.getElementById('imgZoomModal');
+      const target = document.getElementById('imgZoomTarget');
+      target.src = src;
+      modal.classList.add('open');
+    };
+
+    function renderBubbleTab(items) {
+      const avatarSrc = getAvatarForDate(targetDate);
+
+      return items.map((row, idx) => {
+        const koRaw = replaceNick(row.text_ko || '').trim();
+        const zhRaw = replaceNick(row.text_zh || '').trim();
+        const isLiveHeader = koRaw.includes('bubble LIVE');
+        const isLiveDuration = /^📞?\s*\d{2}:\d{2}:\d{2}$/.test(koRaw);
+
+        // 1. 泡泡直播第一條（📞 bubble LIVE）
+        if (isLiveHeader) {
+          const ytUrl = extractUrl(zhRaw);
+          const embedUrl = toYoutubeEmbedUrl(ytUrl);
+          const playerId = `bubble-yt-player-${idx}`;
+          return `
+            <div class="bubble-row">
+              <img class="bubble-avatar" src="${escapeAttr(avatarSrc)}" onerror="this.src='profile/profile_250222.jpg'" alt="" />
+              <div class="bubble-main">
+                <div class="artist-chip">artist 혀기🐶</div>
+                <div class="bubble-line">
+                  <div class="bubble-box" style="max-width:92%;">
+                    <div class="text-ko">${escapeHtml(koRaw)}</div>
+                    ${ytUrl ? `
+                      <button class="live-btn yt" onclick="toggleEmbedPlayer('${playerId}', '${escapeAttr(embedUrl || ytUrl)}')">▶ YouTube</button>
+                      <div class="embed-player-box" id="${playerId}" style="display:none;"></div>
+                    ` : ''}
+                  </div>
+                  <span class="bubble-time">${escapeHtml(row.time || '')}</span>
+                </div>
+              </div>
+            </div>
+          `;
+        }
+
+        // 2. 泡泡直播第二條（📞 00:32:58）
+        if (isLiveDuration) {
+          const biliUrl = extractUrl(zhRaw);
+          return `
+            <div class="bubble-row">
+              <img class="bubble-avatar" src="${escapeAttr(avatarSrc)}" onerror="this.src='profile/profile_250222.jpg'" alt="" />
+              <div class="bubble-main">
+                <div class="artist-chip">artist 혀기🐶</div>
+                <div class="bubble-line">
+                  <div class="bubble-box">
+                    <div class="text-ko">${escapeHtml(koRaw)}</div>
+                    ${biliUrl ? `<a class="live-btn bili" href="${escapeAttr(biliUrl)}" target="_blank" rel="noopener">Bilibili</a>` : ''}
+                  </div>
+                  <span class="bubble-time">${escapeHtml(row.time || '')}</span>
+                </div>
+              </div>
+            </div>
+          `;
+        }
+
+        // 3. 貼圖
+        if (row.type === 'sticker') {
+          return `
+            <div class="bubble-row">
+              <img class="bubble-avatar" src="${escapeAttr(avatarSrc)}" onerror="this.src='profile/profile_250222.jpg'" alt="" />
+              <div class="bubble-main">
+                <div class="artist-chip">artist 혀기🐶</div>
+                <div class="bubble-line">
+                  <div class="sticker-placeholder">✨ Sticker</div>
+                  <span class="bubble-time">${escapeHtml(row.time || '')}</span>
+                </div>
+              </div>
+            </div>
+          `;
+        }
+
+        // 4. 圖片 / 語音 / 影片媒體（隱藏檔名）
+        const mediaPath = row.asset || (isMediaFilenameText(koRaw) ? koRaw : '');
+        if (mediaPath) {
+          const lower = String(mediaPath).toLowerCase();
+          let mediaTag = '';
+          if (lower.endsWith('.mp4')) {
+            mediaTag = `<video class="standalone-media-video" src="${escapeAttr(mediaPath)}" controls></video>`;
+          } else if (lower.startsWith('voices/') || lower.includes('_voice_') || /\.(mp3|wav|m4a|ogg)$/.test(lower)) {
+            mediaTag = `<audio class="standalone-audio" src="${escapeAttr(mediaPath)}" controls></audio>`;
+          } else {
+            mediaTag = `<img class="standalone-media-img" src="${escapeAttr(mediaPath)}" loading="lazy" alt="" onclick="zoomImage('${escapeAttr(mediaPath)}')" />`;
+          }
+
+          // 僅當語言非 original 且有翻譯內容時，在媒體下方以虛線接續翻譯
+          const showTrans = (userLang !== 'original') && Boolean(zhRaw) && !isMediaFilenameText(zhRaw);
+          const transText = convertChinese(zhRaw, userLang);
+
+          return `
+            <div class="bubble-row">
+              <img class="bubble-avatar" src="${escapeAttr(avatarSrc)}" onerror="this.src='profile/profile_250222.jpg'" alt="" />
+              <div class="bubble-main">
+                <div class="artist-chip">artist 혀기🐶</div>
+                <div class="bubble-line">
+                  <div class="standalone-media-wrap">
+                    ${mediaTag}
+                    ${showTrans ? `
+                      <div class="media-trans-card">
+                        <div class="text-zh">${escapeHtml(transText)}</div>
+                      </div>
+                    ` : ''}
+                  </div>
+                  <span class="bubble-time">${escapeHtml(row.time || '')}</span>
+                </div>
+              </div>
+            </div>
+          `;
+        }
+
+        // 5. 一般純文字泡泡訊息
+        const showTrans = (userLang !== 'original') && Boolean(zhRaw);
+        const transText = convertChinese(zhRaw, userLang);
+
+        return `
+          <div class="bubble-row">
+            <img class="bubble-avatar" src="${escapeAttr(avatarSrc)}" onerror="this.src='profile/profile_250222.jpg'" alt="" />
+            <div class="bubble-main">
+              <div class="artist-chip">artist 혀기🐶</div>
+              <div class="bubble-line">
+                <div class="bubble-box">
+                  ${koRaw ? `<div class="text-ko">${escapeHtml(koRaw)}</div>` : ''}
+                  ${showTrans ? `<hr class="sns-divider" /><div class="text-zh">${escapeHtml(transText)}</div>` : ''}
+                </div>
+                <span class="bubble-time">${escapeHtml(row.time || '')}</span>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
     function getPlatformStyle(platform) {
       const p = String(platform || '').toLowerCase();
       if (p.includes('instagram')) {
-        return { bg: '#fff0f5', border: '#f4a4c0', badgeBg: '#E1306C', badgeColor: '#fff' };
+        return { bg: '#fff2f7', border: '#f4b0c8', badgeBg: '#E1306C', badgeColor: '#fff' };
       }
       if (p.includes('weverse')) {
-        return { bg: '#f2f3ff', border: '#b8bcf8', badgeBg: '#5053D6', badgeColor: '#fff' };
+        return { bg: '#f4f5ff', border: '#c2c6fa', badgeBg: '#5053D6', badgeColor: '#fff' };
       }
       if (p.includes('x')) {
-        return { bg: '#f4f5f7', border: '#cfd4dc', badgeBg: '#000000', badgeColor: '#fff' };
+        return { bg: '#f5f6f8', border: '#d4d9e2', badgeBg: '#1c1d21', badgeColor: '#fff' };
       }
-      return { bg: '#fff7f0', border: '#ffd1b3', badgeBg: '#ff7b29', badgeColor: '#fff' };
+      return { bg: '#fff8f2', border: '#ffd4b3', badgeBg: '#ff944d', badgeColor: '#fff' };
     }
 
     function platformPriority(platform) {
@@ -371,111 +736,180 @@
       return 3;
     }
 
-    function sortSnsItems(list) {
-      // 依平台優先序（X -> Instagram -> 其他）排序，同平台內再依帳號分組集中出現
-      return [...list].sort((a, b) => {
+    function isReplyOrQuote(post) {
+      const p = String(post.platform || '').toLowerCase();
+      const ko = String(post.text_ko || '');
+      return p.includes('reply') || p.includes('quote') || ko.includes('↩') || /^>\s*@/m.test(ko);
+    }
+
+    function groupSnsWithReplies(list) {
+      const sorted = [...list].sort((a, b) => {
         const pa = platformPriority(a.platform);
         const pb = platformPriority(b.platform);
         if (pa !== pb) return pa - pb;
-
         const platCmp = String(a.platform || '').localeCompare(String(b.platform || ''));
         if (platCmp !== 0) return platCmp;
-
         return String(a.account || '').localeCompare(String(b.account || ''));
       });
-    }
 
-    function renderBubbleTab(items) {
-      const avatarSrc = getAvatarForDate(targetDate);
-      return items.map(row => {
-        let inner = '';
-        if (row.type === 'sticker') {
-          inner = `<div class="sticker-placeholder">✨ Sticker ${row.note ? `· ${escapeHtml(row.note)}` : ''}</div>`;
+      const parents = [];
+      const orphanedReplies = [];
+
+      sorted.forEach(item => {
+        if (!isReplyOrQuote(item)) {
+          parents.push({ main: item, replies: [] });
         } else {
-          const ko = replaceNick(row.text_ko);
-          const zh = replaceNick(row.text_zh);
-          if (ko) inner += `<div class="text-ko">${escapeHtml(ko)}</div>`;
-          if (zh) inner += `<div class="text-zh">${escapeHtml(zh)}</div>`;
-          if (row.asset) {
-            if (row.asset.toLowerCase().endsWith('.mp4')) {
-              inner += `<div class="media-grid"><video src="${escapeAttr(row.asset)}" controls></video></div>`;
-            } else if (row.asset.startsWith('voices/')) {
-              inner += `<div style="margin-top:8px;"><audio src="${escapeAttr(row.asset)}" controls></audio></div>`;
-            } else {
-              inner += `<div class="media-grid"><img src="${escapeAttr(row.asset)}" loading="lazy" alt="bubble" /></div>`;
+          // 找同平台同帳號最近的母貼文掛載
+          let matchedParent = null;
+          for (let i = parents.length - 1; i >= 0; i--) {
+            if (String(parents[i].main.account || '') === String(item.account || '')) {
+              matchedParent = parents[i];
+              break;
             }
           }
+          if (matchedParent) matchedParent.replies.push(item);
+          else orphanedReplies.push(item);
         }
+      });
 
-        return `
-          <div class="bubble-row">
-            <img class="bubble-avatar" src="${escapeAttr(avatarSrc)}" onerror="this.src='profile/profile_250222.jpg'" alt="혀기🐶" />
-            <div class="bubble-main">
-              <div class="bubble-artist">artist 혀기🐶</div>
-              <div class="bubble-line">
-                <div class="bubble-box">${inner}</div>
-                <span class="bubble-time">${escapeHtml(row.time || '')}</span>
-              </div>
-            </div>
-          </div>
-        `;
-      }).join('');
+      // 孤立的 reply/quote 也折疊收合在最末或合併顯示
+      if (orphanedReplies.length) {
+        parents.push({
+          main: orphanedReplies[0],
+          replies: orphanedReplies.slice(1),
+          isStandaloneReply: true
+        });
+      }
+
+      return parents;
     }
 
+    function renderCarousel(mediaPaths, cid) {
+      if (!mediaPaths || !mediaPaths.length) return '';
+      const slides = mediaPaths.map(p => {
+        if (String(p).toLowerCase().endsWith('.mp4')) {
+          return `<div class="carousel-slide"><video src="${escapeAttr(p)}" controls></video></div>`;
+        }
+        return `<div class="carousel-slide"><img src="${escapeAttr(p)}" loading="lazy" alt="" onclick="zoomImage('${escapeAttr(p)}')" /></div>`;
+      }).join('');
+
+      const multi = mediaPaths.length > 1;
+      return `
+        <div class="carousel-wrap" id="${cid}">
+          <div class="carousel-track" onscroll="updateCarouselCounter('${cid}', ${mediaPaths.length})">
+            ${slides}
+          </div>
+          ${multi ? `
+            <button class="carousel-nav prev" onclick="slideCarousel('${cid}', -1)">‹</button>
+            <button class="carousel-nav next" onclick="slideCarousel('${cid}', 1)">›</button>
+            <div class="carousel-counter" id="counter-${cid}">1 / ${mediaPaths.length}</div>
+          ` : ''}
+        </div>
+      `;
+    }
+
+    window.slideCarousel = function(cid, dir) {
+      const wrap = document.getElementById(cid);
+      if (!wrap) return;
+      const track = wrap.querySelector('.carousel-track');
+      track.scrollBy({ left: dir * track.clientWidth, behavior: 'smooth' });
+    };
+
+    window.updateCarouselCounter = function(cid, total) {
+      const wrap = document.getElementById(cid);
+      const counter = document.getElementById('counter-' + cid);
+      if (!wrap || !counter) return;
+      const track = wrap.querySelector('.carousel-track');
+      const idx = Math.min(total, Math.max(1, Math.round(track.scrollLeft / track.clientWidth) + 1));
+      counter.textContent = `${idx} / ${total}`;
+    };
+
+    window.toggleRepliesList = function(listId) {
+      const el = document.getElementById(listId);
+      if (el) el.classList.toggle('open');
+    };
+
     function renderSnsTab(items) {
-      const sorted = sortSnsItems(items);
-      return sorted.map((post, idx) => {
+      const groups = groupSnsWithReplies(items);
+
+      return groups.map((grp, gIdx) => {
+        const post = grp.main;
         const style = getPlatformStyle(post.platform);
-        const ko = replaceNick(post.text_ko).trim();
-        const zh = replaceNick(post.text_zh).trim();
-        const hasZh = Boolean(zh);
+        const ko = replaceNick(post.text_ko || '').trim();
+        const zhRaw = replaceNick(post.text_zh || '').trim();
+        const showTrans = (userLang !== 'original') && Boolean(zhRaw);
+        const zh = convertChinese(zhRaw, userLang);
         const isStory = String(post.platform || '').toLowerCase().includes('story');
         const mainUrl = (post.urls && post.urls.length) ? post.urls[0] : '';
+        const paths = post.media_paths && post.media_paths.length ? post.media_paths : (post.media || []);
 
-        const mediaHtml = (post.media_paths && post.media_paths.length)
-          ? `<div class="media-grid">${post.media_paths.map(p =>
-              p.toLowerCase().endsWith('.mp4')
-                ? `<video src="${escapeAttr(p)}" controls></video>`
-                : `<img src="${escapeAttr(p)}" loading="lazy" alt="sns media" />`
-            ).join('')}</div>`
-          : '';
+        const koId = `sns-ko-${gIdx}`;
+        const zhId = `sns-zh-${gIdx}`;
+        const carouselId = `sns-car-${gIdx}`;
+        const replyListId = `sns-rep-${gIdx}`;
 
-        const koId = `sns-ko-${idx}`;
-        const zhId = `sns-zh-${idx}`;
+        const repliesHtml = grp.replies.length ? `
+          <div class="replies-box">
+            <button class="reply-toggle-btn" onclick="toggleRepliesList('${replyListId}')">
+              ↳ Replies (${grp.replies.length})
+            </button>
+            <div class="reply-list" id="${replyListId}">
+              ${grp.replies.map((r, rIdx) => {
+                const rKo = replaceNick(r.text_ko || '').trim();
+                const rZhRaw = replaceNick(r.text_zh || '').trim();
+                const rShowTrans = (userLang !== 'original') && Boolean(rZhRaw);
+                const rZh = convertChinese(rZhRaw, userLang);
+                const rPaths = r.media_paths && r.media_paths.length ? r.media_paths : (r.media || []);
+                return `
+                  <div class="reply-subcard">
+                    <div style="font-size:0.74rem; font-weight:800; color:var(--muted); margin-bottom:4px;">
+                      ${escapeHtml(r.platform || '')} • ${escapeHtml(r.account || '')}
+                    </div>
+                    ${rKo ? `<div class="text-ko">${escapeHtml(rKo)}</div>` : ''}
+                    ${rShowTrans ? `<hr class="sns-divider" /><div class="text-zh">${escapeHtml(rZh)}</div>` : ''}
+                    ${renderCarousel(rPaths, `${carouselId}-r${rIdx}`)}
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          </div>
+        ` : '';
 
         return `
-          <article class="sns-card" style="background:${style.bg}; border-color:${style.border};">
-            <div class="sns-top">
+          <section class="sns-block">
+            <div class="sns-outside-header">
               <span class="platform-badge" style="background:${style.badgeBg}; color:${style.badgeColor};">
                 ${escapeHtml(post.platform || '')} • ${escapeHtml(post.account || '')}
               </span>
             </div>
-            ${ko ? `
-              <div>
-                <div class="text-ko collapsible-text" id="${koId}">${escapeHtml(ko)}</div>
-                <button class="more-btn" id="btn-${koId}" style="display:none;" onclick="toggleCollapse('${koId}', 'btn-${koId}')">[ more... ]</button>
-              </div>
-            ` : ''}
-            ${hasZh ? `
-              <hr class="sns-divider" />
-              <div>
-                <div class="text-zh collapsible-text" id="${zhId}">${escapeHtml(zh)}</div>
-                <button class="more-btn" id="btn-${zhId}" style="display:none;" onclick="toggleCollapse('${zhId}', 'btn-${zhId}')">[ more... ]</button>
-              </div>
-            ` : ''}
-            ${mediaHtml}
-            ${(!isStory && mainUrl) ? `
-              <div class="sns-footer">
-                <a class="dog-link-btn" href="${escapeAttr(mainUrl)}" target="_blank" rel="noopener" title="前往原貼文">🐶</a>
-              </div>
-            ` : ''}
-          </article>
+            <article class="sns-card" style="background:${style.bg}; border-color:${style.border};">
+              ${ko ? `
+                <div>
+                  <div class="text-ko collapsible-text" id="${koId}">${escapeHtml(ko)}</div>
+                  <button class="more-btn" id="btn-${koId}" style="display:none;" onclick="toggleCollapse('${koId}', 'btn-${koId}')">[ more... ]</button>
+                </div>
+              ` : ''}
+              ${showTrans ? `
+                <hr class="sns-divider" />
+                <div>
+                  <div class="text-zh collapsible-text" id="${zhId}">${escapeHtml(zh)}</div>
+                  <button class="more-btn" id="btn-${zhId}" style="display:none;" onclick="toggleCollapse('${zhId}', 'btn-${zhId}')">[ more... ]</button>
+                </div>
+              ` : ''}
+              ${renderCarousel(paths, carouselId)}
+              ${repliesHtml}
+              ${(!isStory && mainUrl) ? `
+                <div class="sns-footer">
+                  <a class="dog-link-btn" href="${escapeAttr(mainUrl)}" target="_blank" rel="noopener">🐶</a>
+                </div>
+              ` : ''}
+            </article>
+          </section>
         `;
       }).join('');
     }
 
     function renderMediaTab(items) {
-      // 依 type 欄位 A~Z 排序（不顯示日期欄位）
       const sorted = [...items].sort((a, b) =>
         String(a.type || '').localeCompare(String(b.type || ''), 'en', { sensitivity: 'base' })
       );
@@ -497,16 +931,24 @@
         x: 'X'
       };
 
-      return sorted.map(m => {
+      return sorted.map((m, idx) => {
         const members = String(m.members || '').split(',').map(s => s.trim()).filter(Boolean);
         const memberHtml = members.map(mb => {
           const isHyuk = mb === '혁';
           return `<span class="member-tag ${isHyuk ? 'member-hyuk' : 'member-other'}">${escapeHtml(mb)}</span>`;
         }).join('');
 
+        const showTitleZh = (userLang !== 'original') && Boolean(m.title_zh);
+        const titleZhText = convertChinese(m.title_zh || '', userLang);
+        const ytEmbedId = `media-yt-${idx}`;
+
         const linkHtml = Object.entries(m.links || {}).map(([key, url]) => {
           const bg = btnColors[key] || '#555';
           const label = btnLabels[key] || key;
+          if (key === 'yt') {
+            const embedUrl = toYoutubeEmbedUrl(url);
+            return `<button class="p-btn yt" style="background:${bg};" onclick="toggleEmbedPlayer('${ytEmbedId}', '${escapeAttr(embedUrl || url)}')">▶ ${escapeHtml(label)}</button>`;
+          }
           return `<a class="p-btn ${key}" style="background:${bg};" href="${escapeAttr(url)}" target="_blank" rel="noopener">${escapeHtml(label)}</a>`;
         }).join('');
 
@@ -517,17 +959,17 @@
               ${memberHtml}
             </div>
             ${m.title ? `<div class="text-ko">${escapeHtml(m.title)}</div>` : ''}
-            ${m.title_zh ? `<div class="text-zh">${escapeHtml(m.title_zh)}</div>` : ''}
+            ${showTitleZh ? `<div class="text-zh" style="margin-top:4px;">${escapeHtml(titleZhText)}</div>` : ''}
             ${linkHtml ? `<div class="platform-btns">${linkHtml}</div>` : ''}
+            <div class="embed-player-box" id="${ytEmbedId}" style="display:none;"></div>
           </div>
         `;
       }).join('');
     }
 
     function checkFiveLineOverflow() {
-      // 超過 5 行自動顯示 [ more... ]
       document.querySelectorAll('.collapsible-text').forEach(el => {
-        const lineHeight = parseFloat(getComputedStyle(el).lineHeight) || 24;
+        const lineHeight = parseFloat(getComputedStyle(el).lineHeight) || 22;
         const maxHeight = lineHeight * 5 + 2;
         if (el.scrollHeight > maxHeight) {
           const btn = document.getElementById('btn-' + el.id);
@@ -536,15 +978,18 @@
       });
     }
 
-    function toggleCollapse(textId, btnId) {
+    window.toggleCollapse = function(textId, btnId) {
       const el = document.getElementById(textId);
       const btn = document.getElementById(btnId);
       if (!el || !btn) return;
       const expanded = el.classList.toggle('expanded');
       btn.textContent = expanded ? '[ less ]' : '[ more... ]';
-    }
+    };
 
-    function setupPrevNext(allDates) {
+    function setupNavigation(allDates) {
+      const yy = /^\d{6}$/.test(targetDate) ? '20' + targetDate.slice(0, 2) : '2026';
+      document.getElementById('calReturnBtn').href = `calendar.html?year=${yy}`;
+
       const sorted = Array.from(allDates).sort();
       const idx = sorted.indexOf(targetDate);
       const prevBtn = document.getElementById('prevDayBtn');
@@ -575,15 +1020,17 @@
 
         const allDates = new Set();
         ['bubble', 'sns', 'media'].forEach(cat => {
-          (data[cat] || []).forEach(it => { if (it.date) allDates.add(String(it.date)); });
+          (data[cat] || []).forEach(it => {
+            const nd = normDate(it.date);
+            if (nd) allDates.add(nd);
+          });
         });
-        setupPrevNext(allDates);
+        setupNavigation(allDates);
 
-        const dayBubble = (data.bubble || []).filter(x => String(x.date) === targetDate);
-        const daySns = (data.sns || []).filter(x => String(x.date) === targetDate);
-        const dayMedia = (data.media || []).filter(x => String(x.date) === targetDate);
+        const dayBubble = (data.bubble || []).filter(x => normDate(x.date) === targetDate);
+        const daySns = (data.sns || []).filter(x => normDate(x.date) === targetDate);
+        const dayMedia = (data.media || []).filter(x => normDate(x.date) === targetDate);
 
-        // 只建立當天有更新的分頁按鈕（純表情符號）
         const availableTabs = [
           { key: 'bubble', emoji: '🫧', list: dayBubble, render: renderBubbleTab },
           { key: 'sns', emoji: '💭', list: daySns, render: renderSnsTab },
@@ -595,7 +1042,7 @@
 
         if (!availableTabs.length) {
           tabsEl.innerHTML = '';
-          contentEl.innerHTML = '<div style="text-align:center; color:var(--muted); padding:40px 0;">這一天沒有紀錄</div>';
+          contentEl.innerHTML = '<div style="text-align:center; color:var(--muted); padding:40px 0;">No records on this day</div>';
           return;
         }
 

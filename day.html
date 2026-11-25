@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>혀기🐶 Archive - Daily Log</title>
+  <style>
+    :root {
+      --bg: #fffaf5;
+      --card: #ffffff;
+      --orange: #ff7b29;
+      --orange-soft: #fff0e5;
+      --text: #2b2623;
+      --muted: #8c7f77;
+      --border: #f0e2d8;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", "Apple SD Gothic Neo", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 20px 16px 96px;
+    }
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    .day-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .day-title {
+      font-size: 1.35rem;
+      font-weight: 900;
+      color: var(--text);
+    }
+
+    /* 純表情符號分頁列 */
+    .emoji-tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .emoji-tab {
+      flex: 1;
+      padding: 11px 0;
+      border-radius: 16px;
+      border: 1.5px solid var(--border);
+      background: var(--card);
+      font-size: 1.35rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .emoji-tab.active {
+      background: var(--orange);
+      border-color: var(--orange);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 14px rgba(255, 123, 41, 0.25);
+    }
+
+    /* 🫧 Bubble 樣式：每一則上方都保留 artist 혀기🐶 */
+    .bubble-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .bubble-avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex-shrink: 0;
+      border: 1.5px solid #ffd1b3;
+      background: #ffe8d6;
+    }
+    .bubble-main {
+      flex: 1;
+      min-width: 0;
+    }
+    .bubble-artist {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+    .bubble-line {
+      display: flex;
+      align-items: flex-end;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .bubble-box {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 4px 16px 16px 16px;
+      padding: 10px 14px;
+      max-width: 85%;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.02);
+    }
+    .bubble-time {
+      font-size: 0.74rem;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+    .sticker-placeholder {
+      background: var(--orange-soft);
+      border: 1px dashed #ffb98a;
+      color: #8c5a3c;
+      padding: 6px 12px;
+      border-radius: 10px;
+      font-size: 0.85rem;
+    }
+
+    /* 💭 SNS 卡片樣式 */
+    .sns-card {
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: 18px;
+      padding: 16px;
+      margin-bottom: 14px;
+      position: relative;
+    }
+    .sns-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .platform-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 800;
+    }
+    .text-ko {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      white-space: pre-line;
+      word-break: break-word;
+    }
+    .text-zh {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      white-space: pre-line;
+      word-break: break-word;
+      font-weight: 500;
+    }
+    .sns-divider {
+      border: none;
+      border-top: 1px dashed var(--border);
+      margin: 10px 0;
+    }
+
+    /* 5 行長文折疊 */
+    .collapsible-text {
+      position: relative;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 5;
+      overflow: hidden;
+    }
+    .collapsible-text.expanded {
+      display: block;
+      -webkit-line-clamp: unset;
+      overflow: visible;
+    }
+    .more-btn {
+      background: none;
+      border: none;
+      color: var(--orange);
+      font-weight: 700;
+      font-size: 0.84rem;
+      padding: 4px 0 0;
+      cursor: pointer;
+    }
+
+    .media-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .media-grid img, .media-grid video {
+      width: 100%;
+      height: 170px;
+      object-fit: cover;
+      border-radius: 12px;
+      background: #f5ece6;
+    }
+    .sns-footer {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 10px;
+    }
+    .dog-link-btn {
+      text-decoration: none;
+      font-size: 1.15rem;
+      background: var(--orange-soft);
+      border: 1px solid #ffd1b3;
+      border-radius: 10px;
+      padding: 4px 10px;
+      transition: transform 0.12s;
+    }
+    .dog-link-btn:hover { transform: scale(1.08); }
+
+    /* 🎞️ Media 列表樣式 */
+    .media-item-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+    .media-item-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .type-tag {
+      background: #f3ece7;
+      color: #524740;
+      padding: 3px 10px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 800;
+    }
+    .member-tag {
+      padding: 3px 9px;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+    .member-hyuk {
+      background: var(--orange);
+      color: #ffffff;
+    }
+    .member-other {
+      background: #2b2d36;
+      color: #f3f4f6;
+    }
+    .platform-btns {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .p-btn {
+      text-decoration: none;
+      padding: 6px 12px;
+      border-radius: 10px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+    .p-btn.wb { color: #1f1b18; } /* 微博黃底配深色字較清晰 */
+
+    /* 底部固定導覽列：Previous / Calendar / Next */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(255, 250, 245, 0.94);
+      backdrop-filter: blur(8px);
+      border-top: 1px solid var(--border);
+      padding: 12px 16px;
+      z-index: 20;
+    }
+    .bottom-nav-inner {
+      max-width: 720px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    .nav-action-btn {
+      text-align: center;
+      text-decoration: none;
+      padding: 10px 8px;
+      border-radius: 12px;
+      border: 1.5px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+      font-weight: 800;
+      font-size: 0.9rem;
+    }
+    .nav-action-btn.disabled {
+      opacity: 0.35;
+      pointer-events: none;
+    }
+    .nav-action-btn.cal-btn {
+      background: var(--orange-soft);
+      border-color: #ffd1b3;
+      color: var(--orange);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="day-header">
+      <div class="day-title" id="dayTitle">2026.01.01</div>
+    </div>
+
+    <div class="emoji-tabs" id="emojiTabs"></div>
+    <main id="dayContent"></main>
+  </div>
+
+  <nav class="bottom-nav">
+    <div class="bottom-nav-inner">
+      <a class="nav-action-btn disabled" id="prevDayBtn" href="#">Previous</a>
+      <a class="nav-action-btn cal-btn" id="calReturnBtn" href="years.html">Calendar</a>
+      <a class="nav-action-btn disabled" id="nextDayBtn" href="#">Next</a>
+    </div>
+  </nav>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const targetDate = params.get('date') || '260101';
+    const userNick = localStorage.getItem('bh_nickname') || 'iE';
+
+    let archiveData = { bubble: [], sns: [], media: [] };
+    let profileList = [
+      '250222', '250401', '250413', '251123', '260331', '260403'
+    ];
+    let activeTab = null;
+
+    function formatDisplayDate(yymmdd) {
+      if (!/^\d{6}$/.test(yymmdd)) return yymmdd;
+      return `20${yymmdd.slice(0, 2)}.${yymmdd.slice(2, 4)}.${yymmdd.slice(4, 6)}`;
+    }
+
+    function replaceNick(str) {
+      return String(str || '').replace(/@@/g, userNick);
+    }
+
+    function getAvatarForDate(yymmdd) {
+      // 找小於或等於當日日期的最新頭像檔名
+      let chosen = profileList[0];
+      for (const pDate of profileList) {
+        if (pDate <= yymmdd) chosen = pDate;
+      }
+      return `profile/profile_${chosen}.jpg`;
+    }
+
+    function getPlatformStyle(platform) {
+      const p = String(platform || '').toLowerCase();
+      if (p.includes('instagram')) {
+        return { bg: '#fff0f5', border: '#f4a4c0', badgeBg: '#E1306C', badgeColor: '#fff' };
+      }
+      if (p.includes('weverse')) {
+        return { bg: '#f2f3ff', border: '#b8bcf8', badgeBg: '#5053D6', badgeColor: '#fff' };
+      }
+      if (p.includes('x')) {
+        return { bg: '#f4f5f7', border: '#cfd4dc', badgeBg: '#000000', badgeColor: '#fff' };
+      }
+      return { bg: '#fff7f0', border: '#ffd1b3', badgeBg: '#ff7b29', badgeColor: '#fff' };
+    }
+
+    function platformPriority(platform) {
+      const p = String(platform || '').toLowerCase();
+      if (p === 'x' || p.startsWith('x ')) return 1;
+      if (p.includes('instagram')) return 2;
+      return 3;
+    }
+
+    function sortSnsItems(list) {
+      // 依平台優先序（X -> Instagram -> 其他）排序，同平台內再依帳號分組集中出現
+      return [...list].sort((a, b) => {
+        const pa = platformPriority(a.platform);
+        const pb = platformPriority(b.platform);
+        if (pa !== pb) return pa - pb;
+
+        const platCmp = String(a.platform || '').localeCompare(String(b.platform || ''));
+        if (platCmp !== 0) return platCmp;
+
+        return String(a.account || '').localeCompare(String(b.account || ''));
+      });
+    }
+
+    function renderBubbleTab(items) {
+      const avatarSrc = getAvatarForDate(targetDate);
+      return items.map(row => {
+        let inner = '';
+        if (row.type === 'sticker') {
+          inner = `<div class="sticker-placeholder">✨ Sticker ${row.note ? `· ${escapeHtml(row.note)}` : ''}</div>`;
+        } else {
+          const ko = replaceNick(row.text_ko);
+          const zh = replaceNick(row.text_zh);
+          if (ko) inner += `<div class="text-ko">${escapeHtml(ko)}</div>`;
+          if (zh) inner += `<div class="text-zh">${escapeHtml(zh)}</div>`;
+          if (row.asset) {
+            if (row.asset.toLowerCase().endsWith('.mp4')) {
+              inner += `<div class="media-grid"><video src="${escapeAttr(row.asset)}" controls></video></div>`;
+            } else if (row.asset.startsWith('voices/')) {
+              inner += `<div style="margin-top:8px;"><audio src="${escapeAttr(row.asset)}" controls></audio></div>`;
+            } else {
+              inner += `<div class="media-grid"><img src="${escapeAttr(row.asset)}" loading="lazy" alt="bubble" /></div>`;
+            }
+          }
+        }
+
+        return `
+          <div class="bubble-row">
+            <img class="bubble-avatar" src="${escapeAttr(avatarSrc)}" onerror="this.src='profile/profile_250222.jpg'" alt="혀기🐶" />
+            <div class="bubble-main">
+              <div class="bubble-artist">artist 혀기🐶</div>
+              <div class="bubble-line">
+                <div class="bubble-box">${inner}</div>
+                <span class="bubble-time">${escapeHtml(row.time || '')}</span>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderSnsTab(items) {
+      const sorted = sortSnsItems(items);
+      return sorted.map((post, idx) => {
+        const style = getPlatformStyle(post.platform);
+        const ko = replaceNick(post.text_ko).trim();
+        const zh = replaceNick(post.text_zh).trim();
+        const hasZh = Boolean(zh);
+        const isStory = String(post.platform || '').toLowerCase().includes('story');
+        const mainUrl = (post.urls && post.urls.length) ? post.urls[0] : '';
+
+        const mediaHtml = (post.media_paths && post.media_paths.length)
+          ? `<div class="media-grid">${post.media_paths.map(p =>
+              p.toLowerCase().endsWith('.mp4')
+                ? `<video src="${escapeAttr(p)}" controls></video>`
+                : `<img src="${escapeAttr(p)}" loading="lazy" alt="sns media" />`
+            ).join('')}</div>`
+          : '';
+
+        const koId = `sns-ko-${idx}`;
+        const zhId = `sns-zh-${idx}`;
+
+        return `
+          <article class="sns-card" style="background:${style.bg}; border-color:${style.border};">
+            <div class="sns-top">
+              <span class="platform-badge" style="background:${style.badgeBg}; color:${style.badgeColor};">
+                ${escapeHtml(post.platform || '')} • ${escapeHtml(post.account || '')}
+              </span>
+            </div>
+            ${ko ? `
+              <div>
+                <div class="text-ko collapsible-text" id="${koId}">${escapeHtml(ko)}</div>
+                <button class="more-btn" id="btn-${koId}" style="display:none;" onclick="toggleCollapse('${koId}', 'btn-${koId}')">[ more... ]</button>
+              </div>
+            ` : ''}
+            ${hasZh ? `
+              <hr class="sns-divider" />
+              <div>
+                <div class="text-zh collapsible-text" id="${zhId}">${escapeHtml(zh)}</div>
+                <button class="more-btn" id="btn-${zhId}" style="display:none;" onclick="toggleCollapse('${zhId}', 'btn-${zhId}')">[ more... ]</button>
+              </div>
+            ` : ''}
+            ${mediaHtml}
+            ${(!isStory && mainUrl) ? `
+              <div class="sns-footer">
+                <a class="dog-link-btn" href="${escapeAttr(mainUrl)}" target="_blank" rel="noopener" title="前往原貼文">🐶</a>
+              </div>
+            ` : ''}
+          </article>
+        `;
+      }).join('');
+    }
+
+    function renderMediaTab(items) {
+      // 依 type 欄位 A~Z 排序（不顯示日期欄位）
+      const sorted = [...items].sort((a, b) =>
+        String(a.type || '').localeCompare(String(b.type || ''), 'en', { sensitivity: 'base' })
+      );
+
+      const btnColors = {
+        yt: '#FF0000',
+        bili: '#FB7298',
+        wb: '#FFD100',
+        wvs: '#5053D6',
+        ig: '#E1306C',
+        x: '#000000'
+      };
+      const btnLabels = {
+        yt: 'YouTube',
+        bili: 'Bilibili',
+        wb: '微博',
+        wvs: 'Weverse',
+        ig: 'Instagram',
+        x: 'X'
+      };
+
+      return sorted.map(m => {
+        const members = String(m.members || '').split(',').map(s => s.trim()).filter(Boolean);
+        const memberHtml = members.map(mb => {
+          const isHyuk = mb === '혁';
+          return `<span class="member-tag ${isHyuk ? 'member-hyuk' : 'member-other'}">${escapeHtml(mb)}</span>`;
+        }).join('');
+
+        const linkHtml = Object.entries(m.links || {}).map(([key, url]) => {
+          const bg = btnColors[key] || '#555';
+          const label = btnLabels[key] || key;
+          return `<a class="p-btn ${key}" style="background:${bg};" href="${escapeAttr(url)}" target="_blank" rel="noopener">${escapeHtml(label)}</a>`;
+        }).join('');
+
+        return `
+          <div class="media-item-card">
+            <div class="media-item-head">
+              <span class="type-tag">${escapeHtml(m.type || '')}</span>
+              ${memberHtml}
+            </div>
+            ${m.title ? `<div class="text-ko">${escapeHtml(m.title)}</div>` : ''}
+            ${m.title_zh ? `<div class="text-zh">${escapeHtml(m.title_zh)}</div>` : ''}
+            ${linkHtml ? `<div class="platform-btns">${linkHtml}</div>` : ''}
+          </div>
+        `;
+      }).join('');
+    }
+
+    function checkFiveLineOverflow() {
+      // 超過 5 行自動顯示 [ more... ]
+      document.querySelectorAll('.collapsible-text').forEach(el => {
+        const lineHeight = parseFloat(getComputedStyle(el).lineHeight) || 24;
+        const maxHeight = lineHeight * 5 + 2;
+        if (el.scrollHeight > maxHeight) {
+          const btn = document.getElementById('btn-' + el.id);
+          if (btn) btn.style.display = 'inline-block';
+        }
+      });
+    }
+
+    function toggleCollapse(textId, btnId) {
+      const el = document.getElementById(textId);
+      const btn = document.getElementById(btnId);
+      if (!el || !btn) return;
+      const expanded = el.classList.toggle('expanded');
+      btn.textContent = expanded ? '[ less ]' : '[ more... ]';
+    }
+
+    function setupPrevNext(allDates) {
+      const sorted = Array.from(allDates).sort();
+      const idx = sorted.indexOf(targetDate);
+      const prevBtn = document.getElementById('prevDayBtn');
+      const nextBtn = document.getElementById('nextDayBtn');
+
+      if (idx > 0) {
+        prevBtn.href = `day.html?date=${sorted[idx - 1]}`;
+        prevBtn.classList.remove('disabled');
+      }
+      if (idx >= 0 && idx < sorted.length - 1) {
+        nextBtn.href = `day.html?date=${sorted[idx + 1]}`;
+        nextBtn.classList.remove('disabled');
+      }
+    }
+
+    function escapeHtml(s) {
+      return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+    function escapeAttr(s) {
+      return String(s || '').replace(/"/g, '&quot;');
+    }
+
+    fetch('data.json')
+      .then(r => r.json())
+      .then(data => {
+        archiveData = data;
+        document.getElementById('dayTitle').textContent = formatDisplayDate(targetDate);
+
+        const allDates = new Set();
+        ['bubble', 'sns', 'media'].forEach(cat => {
+          (data[cat] || []).forEach(it => { if (it.date) allDates.add(String(it.date)); });
+        });
+        setupPrevNext(allDates);
+
+        const dayBubble = (data.bubble || []).filter(x => String(x.date) === targetDate);
+        const daySns = (data.sns || []).filter(x => String(x.date) === targetDate);
+        const dayMedia = (data.media || []).filter(x => String(x.date) === targetDate);
+
+        // 只建立當天有更新的分頁按鈕（純表情符號）
+        const availableTabs = [
+          { key: 'bubble', emoji: '🫧', list: dayBubble, render: renderBubbleTab },
+          { key: 'sns', emoji: '💭', list: daySns, render: renderSnsTab },
+          { key: 'media', emoji: '🎞️', list: dayMedia, render: renderMediaTab }
+        ].filter(t => t.list.length > 0);
+
+        const tabsEl = document.getElementById('emojiTabs');
+        const contentEl = document.getElementById('dayContent');
+
+        if (!availableTabs.length) {
+          tabsEl.innerHTML = '';
+          contentEl.innerHTML = '<div style="text-align:center; color:var(--muted); padding:40px 0;">這一天沒有紀錄</div>';
+          return;
+        }
+
+        activeTab = availableTabs[0].key;
+        tabsEl.innerHTML = availableTabs.map((t, i) =>
+          `<button class="emoji-tab ${i === 0 ? 'active' : ''}" data-key="${t.key}">${t.emoji}</button>`
+        ).join('');
+
+        function showTab(key) {
+          activeTab = key;
+          document.querySelectorAll('.emoji-tab').forEach(b => b.classList.toggle('active', b.dataset.key === key));
+          const found = availableTabs.find(t => t.key === key);
+          contentEl.innerHTML = found ? found.render(found.list) : '';
+          checkFiveLineOverflow();
+        }
+
+        tabsEl.querySelectorAll('.emoji-tab').forEach(btn => {
+          btn.addEventListener('click', () => showTab(btn.dataset.key));
+        });
+
+        showTab(activeTab);
+      });
+  </script>
+</body>
+</html>

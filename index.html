@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>혀기🐶 Archive (22.01.03 ~ 26.10.26)</title>
+  <style>
+    :root {
+      --bg: #fffaf5;
+      --card: #ffffff;
+      --orange: #ff7b29;
+      --orange-hover: #e86617;
+      --orange-soft: #fff0e5;
+      --text: #2b2623;
+      --muted: #8c7f77;
+      --border: #f0e2d8;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", "Apple SD Gothic Neo", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+    }
+    .container {
+      width: 100%;
+      max-width: 460px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      padding: 36px 28px;
+      text-align: center;
+      box-shadow: 0 12px 32px rgba(255, 123, 41, 0.08);
+    }
+    .avatar-wrap {
+      width: 116px;
+      height: 116px;
+      margin: 0 auto 16px;
+      border-radius: 50%;
+      padding: 4px;
+      background: linear-gradient(135deg, #ff9d5c, var(--orange));
+      box-shadow: 0 6px 18px rgba(255, 123, 41, 0.25);
+    }
+    .avatar-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+      background: #ffe8d6;
+      display: block;
+    }
+    .artist-name {
+      font-size: 1.55rem;
+      font-weight: 800;
+      margin: 0 0 6px;
+      letter-spacing: 0.5px;
+    }
+    .ig-link {
+      display: inline-block;
+      color: var(--orange);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 6px;
+    }
+    .ig-link:hover { text-decoration: underline; }
+    .period {
+      font-size: 0.85rem;
+      color: var(--muted);
+      letter-spacing: 1px;
+      margin-bottom: 20px;
+    }
+    .intro-box {
+      background: var(--orange-soft);
+      border: 1px dashed #ffd1b3;
+      border-radius: 16px;
+      padding: 16px;
+      min-height: 76px;
+      margin-bottom: 22px;
+      font-size: 0.9rem;
+      color: #6e5d53;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .form-row {
+      display: flex;
+      gap: 8px;
+      align-items: stretch;
+      margin-bottom: 14px;
+    }
+    .form-row input {
+      flex: 1.2;
+      min-width: 0;
+      padding: 11px 12px;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      font-size: 0.92rem;
+      outline: none;
+      background: #fffdfb;
+      color: var(--text);
+    }
+    .form-row input:focus { border-color: var(--orange); }
+    .form-row select {
+      flex: 1;
+      min-width: 0;
+      padding: 11px 8px;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      font-size: 0.9rem;
+      outline: none;
+      background: #fffdfb;
+      color: var(--text);
+      cursor: pointer;
+    }
+    .form-row select:focus { border-color: var(--orange); }
+    .go-btn {
+      width: 100%;
+      padding: 13px;
+      border: none;
+      border-radius: 14px;
+      background: var(--orange);
+      color: #ffffff;
+      font-size: 1.05rem;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      box-shadow: 0 6px 16px rgba(255, 123, 41, 0.3);
+    }
+    .go-btn:hover { background: var(--orange-hover); }
+    .go-btn:active { transform: scale(0.98); }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="avatar-wrap">
+      <!-- 可將下方 src 替換為你指定的首頁代表頭像檔名 -->
+      <img id="indexAvatar" src="profile/profile_260403.jpg" alt="혀기🐶" />
+    </div>
+    <h1 class="artist-name">혀기🐶</h1>
+    <a class="ig-link" href="https://www.instagram.com/bonhyeo_k/" target="_blank" rel="noopener">@bonhyeo_k</a>
+    <div class="period">22.01.03 ~ 26.10.26</div>
+
+    <div class="intro-box" id="siteIntro">
+      <!-- 之後可在此填入網站說明 -->
+      <span>혀기🐶 Archive 施工中🚧</span>
+    </div>
+
+    <div class="form-row">
+      <input type="text" id="nicknameInput" placeholder="Nickname (@@)" maxlength="20" />
+      <select id="langSelect" aria-label="Language">
+        <option value="original">Original</option>
+        <option value="zh-TW">繁體中文</option>
+        <option value="zh-CN">简体中文</option>
+      </select>
+    </div>
+
+    <button class="go-btn" id="goBtn">GO</button>
+  </div>
+
+  <script>
+    const nicknameInput = document.getElementById('nicknameInput');
+    const langSelect = document.getElementById('langSelect');
+    const avatarImg = document.getElementById('indexAvatar');
+
+    // 若指定圖片暫時無法載入，退回備用頭像避免破圖
+    avatarImg.addEventListener('error', () => {
+      if (!avatarImg.dataset.fallback) {
+        avatarImg.dataset.fallback = '1';
+        avatarImg.src = 'profile/profile_230317_fake.jpg';
+      }
+    });
+
+    const savedNick = localStorage.getItem('bh_nickname');
+    const savedLang = localStorage.getItem('bh_lang');
+    if (savedNick) nicknameInput.value = savedNick;
+    if (savedLang) langSelect.value = savedLang;
+
+    document.getElementById('goBtn').addEventListener('click', () => {
+      const nick = nicknameInput.value.trim() || 'iE';
+      const lang = langSelect.value;
+      localStorage.setItem('bh_nickname', nick);
+      localStorage.setItem('bh_lang', lang);
+      window.location.href = 'years.html';
+    });
+  </script>
+</body>
+</html>

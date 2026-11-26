@@ -117,7 +117,7 @@
       text-align: center;
     }
 
-    /* 月曆 */
+    /* 月曆（已移除下方三點，保留生日標記） */
     .calendar-card {
       background: var(--card);
       border: 1px solid var(--border);
@@ -147,7 +147,7 @@
       align-items: center;
       justify-content: center;
       font-weight: 700;
-      font-size: 0.92rem;
+      font-size: 0.95rem;
     }
     .day-cell.empty { background: transparent; }
     .day-cell.inactive {
@@ -178,19 +178,6 @@
       background: #ff7b29;
       margin-top: 3px;
     }
-    .day-dots {
-      display: flex;
-      gap: 3px;
-      margin-top: 4px;
-      height: 5px;
-    }
-    .dot {
-      width: 5px;
-      height: 5px;
-      border-radius: 50%;
-      background: var(--orange);
-    }
-    .day-cell.active:hover .dot { background: #fff; }
 
     /* Gallery 雙分類 */
     .gallery-card {
@@ -325,7 +312,7 @@
       font-size: 0.92rem;
     }
 
-    /* 燈箱與下載/跳轉列 */
+    /* 燈箱 */
     .lightbox {
       position: fixed;
       inset: 0;
@@ -438,7 +425,7 @@
     </section>
   </div>
 
-  <!-- 燈箱（含右上角下載符號與下方平台/日期跳轉列） -->
+  <!-- 燈箱 -->
   <div class="lightbox" id="lightbox" onclick="closeLightbox()">
     <div class="lb-top" onclick="event.stopPropagation()">
       <button class="lb-icon-btn" onclick="closeLightbox()">✕</button>
@@ -513,7 +500,6 @@
       const prefix = yy + mm;
       const collected = [];
 
-      // 1. Bubble 媒體 / 語音
       (archiveData.bubble || []).forEach((item, idx) => {
         const d = normDate(item.date);
         if (!d.startsWith(prefix)) return;
@@ -532,7 +518,6 @@
         });
       });
 
-      // 2. SNS 貼文與限動媒體
       (archiveData.sns || []).forEach((post, idx) => {
         const d = normDate(post.date);
         if (!d.startsWith(prefix)) return;
@@ -552,7 +537,7 @@
         });
       });
 
-      // 嚴格依日期由舊到新（升冪）排序，同日維持原順序
+      // 由舊到新排序
       collected.sort((a, b) => {
         if (a.date !== b.date) return a.date.localeCompare(b.date);
         return a.order - b.order;
@@ -600,11 +585,9 @@
         const bClass = isBirthday ? ' birthday-day' : '';
 
         if (isActive) {
-          const dotsHtml = Array.from(cats).map(() => `<span class="dot"></span>`).join('');
           html += `
             <a class="day-cell active${bClass}" href="day.html?date=${yymmdd}">
               <span class="day-num">${d}</span>
-              <div class="day-dots">${dotsHtml}</div>
             </a>
           `;
         } else {

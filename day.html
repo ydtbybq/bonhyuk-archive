@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>혀기🐶 Archive - Daily Log</title>
+  <script src="https://cdn.jsdelivr.net/npm/opencc-js@1.0.5/dist/umd/full.min.js"></script>
   <style>
     :root {
       --bg: #fff8f2;
@@ -37,29 +38,30 @@
       color: var(--text);
     }
 
-    /* 純表情符號分頁列（淺橘色調） */
+    /* 固定 3 欄比例：正在看為淺橘色，未看為白色 */
     .emoji-tabs {
-      display: flex;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
       gap: 10px;
       margin-bottom: 20px;
     }
     .emoji-tab {
-      flex: 1;
+      width: 100%;
       padding: 10px 0;
       border-radius: 16px;
-      border: 1.5px solid #ffd4b3;
-      background: var(--orange-soft);
+      border: 1.5px solid var(--border);
+      background: var(--card);
       font-size: 1.3rem;
       cursor: pointer;
       transition: all 0.15s;
     }
     .emoji-tab.active {
-      background: var(--orange);
-      border-color: var(--orange);
-      box-shadow: 0 5px 14px rgba(255, 148, 77, 0.28);
+      background: var(--orange-soft);
+      border-color: #ffbd8f;
+      box-shadow: 0 4px 12px rgba(255, 148, 77, 0.16);
     }
 
-    /* 🫧 Bubble：每則保留 artist 혀기🐶 徽章底色 */
+    /* 🫧 Bubble：ARTIST 橘徽章 + 혀기🐶 */
     .bubble-row {
       display: flex;
       align-items: flex-start;
@@ -79,18 +81,25 @@
       flex: 1;
       min-width: 0;
     }
-    .artist-chip {
+    .artist-header-row {
       display: inline-flex;
       align-items: center;
-      gap: 4px;
-      background: var(--orange-soft);
-      border: 1px solid #ffd4b3;
-      color: #8c4d20;
-      font-size: 0.74rem;
-      font-weight: 800;
-      padding: 2px 8px;
-      border-radius: 999px;
+      gap: 6px;
       margin-bottom: 5px;
+    }
+    .artist-badge-pill {
+      background: #ff7b54;
+      color: #ffffff;
+      font-size: 0.68rem;
+      font-weight: 900;
+      letter-spacing: 0.5px;
+      padding: 2px 7px;
+      border-radius: 6px;
+    }
+    .artist-name-label {
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: var(--text);
     }
     .bubble-line {
       display: flex;
@@ -186,7 +195,7 @@
       border: 0;
     }
 
-    /* 💭 SNS：框外左上標頭 + 卡片本體 */
+    /* 💭 SNS */
     .sns-block {
       margin-bottom: 18px;
     }
@@ -302,7 +311,7 @@
       border-radius: 999px;
     }
 
-    /* Reply / Quote 收合區塊 */
+    /* Reply / Quote 收合 */
     .replies-box {
       margin-top: 10px;
       padding-top: 10px;
@@ -336,6 +345,8 @@
     .sns-footer {
       display: flex;
       justify-content: flex-end;
+      flex-wrap: wrap;
+      gap: 6px;
       margin-top: 10px;
     }
     .dog-link-btn {
@@ -494,29 +505,22 @@
     const profileList = ['250222', '250401', '250413', '251123', '260331', '260403'];
     let activeTab = null;
 
-    // 繁簡轉換對照表（針對常見字彙做雙向轉換）
-    const T2S_MAP = {
-      '推薦':'推荐','練習':'练习','禮物':'礼物','喜歡':'喜欢','視訊':'视频','說':'说','開':'开',
-      '見':'见','這':'这','麼':'么','個':'个','為':'为','來':'来','會':'会','讓':'让','對':'对',
-      '時':'时','後':'后','國':'国','韓':'韩','語':'语','華':'华','學':'学','聽':'听','寫':'写',
-      '讀':'读','畫':'画','圖':'图','機':'机','電':'电','話':'话','愛':'爱','樂':'乐','歡':'欢',
-      '點':'点','關':'关','發':'发','進':'进','過':'过','還':'还','從':'从','給':'给','與':'与',
-      '當':'当','經':'经','現':'现','實':'实','體':'体','樣':'样','種':'种','類':'类','題':'题',
-      '問':'问','聲':'声','臉':'脸','眼':'眼','頭':'头','腳':'脚','動':'动','跑':'跑','走':'走',
-      '睡':'睡','覺':'觉','餓':'饿','冷':'冷','熱':'热','風':'风','雲':'云','星':'星','夢':'梦',
-      '謝':'谢','請':'请','幫':'帮','忙':'忙','準':'准','備':'备','結':'结','束':'束','開始':'开始',
-      '濾鏡':'滤镜','粉絲':'粉丝','成員':'成员','直播':'直播','應援':'应援','簽售':'签售'
-    };
-    const S2T_MAP = Object.fromEntries(Object.entries(T2S_MAP).map(([t, s]) => [s, t]));
+    // OpenCC 繁簡轉換器（若 CDN 載入成功則使用完整字庫，否則退回基礎對照）
+    const s2twConverter = (window.OpenCC && window.OpenCC.Converter)
+      ? window.OpenCC.Converter({ from: 'cn', to: 'twp' })
+      : null;
+    const t2cnConverter = (window.OpenCC && window.OpenCC.Converter)
+      ? window.OpenCC.Converter({ from: 'hk', to: 'cn' })
+      : null;
 
     function convertChinese(text, targetLang) {
       const str = String(text || '');
       if (!str) return '';
-      if (targetLang === 'zh-CN') {
-        return Array.from(str).map(ch => T2S_MAP[ch] || ch).join('');
-      }
       if (targetLang === 'zh-TW') {
-        return Array.from(str).map(ch => S2T_MAP[ch] || ch).join('');
+        return s2twConverter ? s2twConverter(str) : str;
+      }
+      if (targetLang === 'zh-CN') {
+        return t2cnConverter ? t2cnConverter(str) : str;
       }
       return str;
     }
@@ -542,14 +546,48 @@
       return `profile/profile_${chosen}.jpg`;
     }
 
+    // 頭像載入失敗時嘗試常見副檔名/檔名變體
+    window.handleAvatarError = function(imgEl) {
+      const step = Number(imgEl.dataset.errStep || 0);
+      const src = imgEl.getAttribute('src') || '';
+      if (step === 0 && src.endsWith('.jpg')) {
+        imgEl.dataset.errStep = '1';
+        imgEl.src = src.replace(/\.jpg$/i, '.png');
+      } else if (step === 1 && src.endsWith('.png')) {
+        imgEl.dataset.errStep = '2';
+        imgEl.src = src.replace(/\.png$/i, '.JPG');
+      } else {
+        imgEl.style.visibility = 'hidden';
+      }
+    };
+
     function isMediaFilenameText(txt) {
       const s = String(txt || '').trim().toLowerCase();
-      if (!s) return false;
-      if (s.includes('\n')) return false;
+      if (!s || s.includes('\n')) return false;
       return /\.(jpg|jpeg|png|gif|webp|mp4|mp3|wav|m4a|ogg)$/.test(s);
     }
 
-    function extractUrl(text) {
+    function extractAllUrls(post) {
+      const list = [];
+      if (Array.isArray(post.urls)) {
+        post.urls.forEach(entry => {
+          String(entry || '')
+            .split(/\r?\n/)
+            .map(u => u.trim())
+            .filter(u => /^https?:\/\//i.test(u))
+            .forEach(u => list.push(u));
+        });
+      } else if (post.urls) {
+        String(post.urls)
+          .split(/\r?\n/)
+          .map(u => u.trim())
+          .filter(u => /^https?:\/\//i.test(u))
+          .forEach(u => list.push(u));
+      }
+      return Array.from(new Set(list));
+    }
+
+    function extractFirstUrl(text) {
       const match = String(text || '').match(/https?:\/\/[^\s]+/i);
       return match ? match[0] : '';
     }
@@ -585,6 +623,15 @@
       modal.classList.add('open');
     };
 
+    function renderArtistHeader() {
+      return `
+        <div class="artist-header-row">
+          <span class="artist-badge-pill">ARTIST</span>
+          <span class="artist-name-label">혀기🐶</span>
+        </div>
+      `;
+    }
+
     function renderBubbleTab(items) {
       const avatarSrc = getAvatarForDate(targetDate);
 
@@ -596,14 +643,14 @@
 
         // 1. 泡泡直播第一條（📞 bubble LIVE）
         if (isLiveHeader) {
-          const ytUrl = extractUrl(zhRaw);
+          const ytUrl = extractFirstUrl(zhRaw);
           const embedUrl = toYoutubeEmbedUrl(ytUrl);
           const playerId = `bubble-yt-player-${idx}`;
           return `
             <div class="bubble-row">
-              <img class="bubble-avatar" src="${escapeAttr(avatarSrc)}" onerror="this.src='profile/profile_250222.jpg'" alt="" />
+              <img class="bubble-avatar" src="${escapeAttr(avatarSrc)}" onerror="handleAvatarError(this)" alt="" />
               <div class="bubble-main">
-                <div class="artist-chip">artist 혀기🐶</div>
+                ${renderArtistHeader()}
                 <div class="bubble-line">
                   <div class="bubble-box" style="max-width:92%;">
                     <div class="text-ko">${escapeHtml(koRaw)}</div>
@@ -621,12 +668,12 @@
 
         // 2. 泡泡直播第二條（📞 00:32:58）
         if (isLiveDuration) {
-          const biliUrl = extractUrl(zhRaw);
+          const biliUrl = extractFirstUrl(zhRaw);
           return `
             <div class="bubble-row">
-              <img class="bubble-avatar" src="${escapeAttr(avatarSrc)}" onerror="this.src='profile/profile_250222.jpg'" alt="" />
+              <img class="bubble-avatar" src="${escapeAttr(avatarSrc)}" onerror="handleAvatarError(this)" alt="" />
               <div class="bubble-main">
-                <div class="artist-chip">artist 혀기🐶</div>
+                ${renderArtistHeader()}
                 <div class="bubble-line">
                   <div class="bubble-box">
                     <div class="text-ko">${escapeHtml(koRaw)}</div>
@@ -643,9 +690,9 @@
         if (row.type === 'sticker') {
           return `
             <div class="bubble-row">
-              <img class="bubble-avatar" src="${escapeAttr(avatarSrc)}" onerror="this.src='profile/profile_250222.jpg'" alt="" />
+              <img class="bubble-avatar" src="${escapeAttr(avatarSrc)}" onerror="handleAvatarError(this)" alt="" />
               <div class="bubble-main">
-                <div class="artist-chip">artist 혀기🐶</div>
+                ${renderArtistHeader()}
                 <div class="bubble-line">
                   <div class="sticker-placeholder">✨ Sticker</div>
                   <span class="bubble-time">${escapeHtml(row.time || '')}</span>
@@ -668,15 +715,14 @@
             mediaTag = `<img class="standalone-media-img" src="${escapeAttr(mediaPath)}" loading="lazy" alt="" onclick="zoomImage('${escapeAttr(mediaPath)}')" />`;
           }
 
-          // 僅當語言非 original 且有翻譯內容時，在媒體下方以虛線接續翻譯
           const showTrans = (userLang !== 'original') && Boolean(zhRaw) && !isMediaFilenameText(zhRaw);
           const transText = convertChinese(zhRaw, userLang);
 
           return `
             <div class="bubble-row">
-              <img class="bubble-avatar" src="${escapeAttr(avatarSrc)}" onerror="this.src='profile/profile_250222.jpg'" alt="" />
+              <img class="bubble-avatar" src="${escapeAttr(avatarSrc)}" onerror="handleAvatarError(this)" alt="" />
               <div class="bubble-main">
-                <div class="artist-chip">artist 혀기🐶</div>
+                ${renderArtistHeader()}
                 <div class="bubble-line">
                   <div class="standalone-media-wrap">
                     ${mediaTag}
@@ -699,9 +745,9 @@
 
         return `
           <div class="bubble-row">
-            <img class="bubble-avatar" src="${escapeAttr(avatarSrc)}" onerror="this.src='profile/profile_250222.jpg'" alt="" />
+            <img class="bubble-avatar" src="${escapeAttr(avatarSrc)}" onerror="handleAvatarError(this)" alt="" />
             <div class="bubble-main">
-              <div class="artist-chip">artist 혀기🐶</div>
+              ${renderArtistHeader()}
               <div class="bubble-line">
                 <div class="bubble-box">
                   ${koRaw ? `<div class="text-ko">${escapeHtml(koRaw)}</div>` : ''}
@@ -759,7 +805,6 @@
         if (!isReplyOrQuote(item)) {
           parents.push({ main: item, replies: [] });
         } else {
-          // 找同平台同帳號最近的母貼文掛載
           let matchedParent = null;
           for (let i = parents.length - 1; i >= 0; i--) {
             if (String(parents[i].main.account || '') === String(item.account || '')) {
@@ -772,12 +817,10 @@
         }
       });
 
-      // 孤立的 reply/quote 也折疊收合在最末或合併顯示
       if (orphanedReplies.length) {
         parents.push({
           main: orphanedReplies[0],
-          replies: orphanedReplies.slice(1),
-          isStandaloneReply: true
+          replies: orphanedReplies.slice(1)
         });
       }
 
@@ -840,7 +883,7 @@
         const showTrans = (userLang !== 'original') && Boolean(zhRaw);
         const zh = convertChinese(zhRaw, userLang);
         const isStory = String(post.platform || '').toLowerCase().includes('story');
-        const mainUrl = (post.urls && post.urls.length) ? post.urls[0] : '';
+        const urlList = isStory ? [] : extractAllUrls(post);
         const paths = post.media_paths && post.media_paths.length ? post.media_paths : (post.media || []);
 
         const koId = `sns-ko-${gIdx}`;
@@ -875,6 +918,10 @@
           </div>
         ` : '';
 
+        const dogBtnsHtml = urlList.map((u, uIdx) =>
+          `<a class="dog-link-btn" href="${escapeAttr(u)}" target="_blank" rel="noopener" title="Link ${uIdx + 1}">🐶</a>`
+        ).join('');
+
         return `
           <section class="sns-block">
             <div class="sns-outside-header">
@@ -898,11 +945,7 @@
               ` : ''}
               ${renderCarousel(paths, carouselId)}
               ${repliesHtml}
-              ${(!isStory && mainUrl) ? `
-                <div class="sns-footer">
-                  <a class="dog-link-btn" href="${escapeAttr(mainUrl)}" target="_blank" rel="noopener">🐶</a>
-                </div>
-              ` : ''}
+              ${dogBtnsHtml ? `<div class="sns-footer">${dogBtnsHtml}</div>` : ''}
             </article>
           </section>
         `;
@@ -941,11 +984,13 @@
         const showTitleZh = (userLang !== 'original') && Boolean(m.title_zh);
         const titleZhText = convertChinese(m.title_zh || '', userLang);
         const ytEmbedId = `media-yt-${idx}`;
+        const lowerType = String(m.type || '').trim().toLowerCase();
+        const isShortOrChallenge = lowerType === 'shorts' || lowerType === 'short' || lowerType === 'challenge';
 
         const linkHtml = Object.entries(m.links || {}).map(([key, url]) => {
           const bg = btnColors[key] || '#555';
           const label = btnLabels[key] || key;
-          if (key === 'yt') {
+          if (key === 'yt' && !isShortOrChallenge) {
             const embedUrl = toYoutubeEmbedUrl(url);
             return `<button class="p-btn yt" style="background:${bg};" onclick="toggleEmbedPlayer('${ytEmbedId}', '${escapeAttr(embedUrl || url)}')">▶ ${escapeHtml(label)}</button>`;
           }

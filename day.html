@@ -31,11 +31,13 @@
     }
     .day-header {
       margin-bottom: 14px;
+      text-align: center;
     }
     .day-title {
-      font-size: 1.3rem;
+      font-size: 1.25rem;
       font-weight: 900;
       color: var(--text);
+      white-space: pre;
     }
 
     /* 固定 3 欄比例：正在看為淺橘色，未看為白色 */
@@ -476,7 +478,7 @@
 <body>
   <div class="container">
     <div class="day-header">
-      <div class="day-title" id="dayTitle">2026.01.17</div>
+      <div class="day-title" id="dayTitle"></div>
     </div>
 
     <div class="emoji-tabs" id="emojiTabs"></div>
@@ -496,16 +498,38 @@
   </div>
 
   <script>
+    const WEEKDAYS_EN = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     const params = new URLSearchParams(window.location.search);
-    const targetDate = normDate(params.get('date') || '260117');
+    const targetDate = normDate(params.get('date') || '260101');
     const userNick = localStorage.getItem('bh_nickname') || 'iE';
-    const userLang = localStorage.getItem('bh_lang') || 'original'; // 'original' | 'zh-TW' | 'zh-CN'
+    const userLang = localStorage.getItem('bh_lang') || 'original';
 
     let archiveData = { bubble: [], sns: [], media: [] };
-    const profileList = ['250222', '250401', '250413', '251123', '260331', '260403'];
+
+    // 依 GitHub profile/ 實際檔案對應日期與檔名
+    const PROFILE_ENTRIES = [
+      { date: '230317', file: 'profile/profile_230317_fake.jpg' },
+      { date: '230401', file: 'profile/profile_230401.jpg' },
+      { date: '230405', file: 'profile/profile_230405.jpg' },
+      { date: '230508', file: 'profile/profile_230508.jpg' },
+      { date: '230801', file: 'profile/profile_230801.jpg' },
+      { date: '231004', file: 'profile/profile_231004.jpg' },
+      { date: '231108', file: 'profile/profile_231108.jpg' },
+      { date: '231117', file: 'profile/profile_231117.jpg' },
+      { date: '240324', file: 'profile/profile_240324.jpg' },
+      { date: '240608', file: 'profile/profile_240608.jpg' },
+      { date: '240624', file: 'profile/profile_240624.jpg' },
+      { date: '241022', file: 'profile/profile_241022.jpg' },
+      { date: '250222', file: 'profile/profile_250222.jpg' },
+      { date: '250401', file: 'profile/profile_250401.jpg' },
+      { date: '250413', file: 'profile/profile_250413.jpg' },
+      { date: '251123', file: 'profile/profile_251123.jpg' },
+      { date: '260331', file: 'profile/profile_260331.jpg' },
+      { date: '260403', file: 'profile/profile_260403.jpg' }
+    ];
+
     let activeTab = null;
 
-    // OpenCC 繁簡轉換器（若 CDN 載入成功則使用完整字庫，否則退回基礎對照）
     const s2twConverter = (window.OpenCC && window.OpenCC.Converter)
       ? window.OpenCC.Converter({ from: 'cn', to: 'twp' })
       : null;
@@ -531,7 +555,14 @@
 
     function formatDisplayDate(yymmdd) {
       if (!/^\d{6}$/.test(yymmdd)) return yymmdd;
-      return `20${yymmdd.slice(0, 2)}.${yymmdd.slice(2, 4)}.${yymmdd.slice(4, 6)}`;
+      const year = 2000 + Number(yymmdd.slice(0, 2));
+      const month = Number(yymmdd.slice(2, 4));
+      const day = Number(yymmdd.slice(4, 6));
+      const dt = new Date(year, month - 1, day);
+      const weekday = WEEKDAYS_EN[dt.getDay()] || '';
+      const mmStr = String(month).padStart(2, '0');
+      const ddStr = String(day).padStart(2, '0');
+      return `${year}.${mmStr}.${ddStr}  ${weekday}`;
     }
 
     function replaceNick(str) {
@@ -539,26 +570,17 @@
     }
 
     function getAvatarForDate(yymmdd) {
-      let chosen = profileList[0];
-      for (const pDate of profileList) {
-        if (pDate <= yymmdd) chosen = pDate;
+      let chosen = PROFILE_ENTRIES[0].file;
+      for (const entry of PROFILE_ENTRIES) {
+        if (entry.date <= yymmdd) {
+          chosen = entry.file;
+        }
       }
-      return `profile/profile_${chosen}.jpg`;
+      return chosen;
     }
 
-    // 頭像載入失敗時嘗試常見副檔名/檔名變體
     window.handleAvatarError = function(imgEl) {
-      const step = Number(imgEl.dataset.errStep || 0);
-      const src = imgEl.getAttribute('src') || '';
-      if (step === 0 && src.endsWith('.jpg')) {
-        imgEl.dataset.errStep = '1';
-        imgEl.src = src.replace(/\.jpg$/i, '.png');
-      } else if (step === 1 && src.endsWith('.png')) {
-        imgEl.dataset.errStep = '2';
-        imgEl.src = src.replace(/\.png$/i, '.JPG');
-      } else {
-        imgEl.style.visibility = 'hidden';
-      }
+      imgEl.style.visibility = 'hidden';
     };
 
     function isMediaFilenameText(txt) {
@@ -641,7 +663,6 @@
         const isLiveHeader = koRaw.includes('bubble LIVE');
         const isLiveDuration = /^📞?\s*\d{2}:\d{2}:\d{2}$/.test(koRaw);
 
-        // 1. 泡泡直播第一條（📞 bubble LIVE）
         if (isLiveHeader) {
           const ytUrl = extractFirstUrl(zhRaw);
           const embedUrl = toYoutubeEmbedUrl(ytUrl);
@@ -666,7 +687,6 @@
           `;
         }
 
-        // 2. 泡泡直播第二條（📞 00:32:58）
         if (isLiveDuration) {
           const biliUrl = extractFirstUrl(zhRaw);
           return `
@@ -686,7 +706,6 @@
           `;
         }
 
-        // 3. 貼圖
         if (row.type === 'sticker') {
           return `
             <div class="bubble-row">
@@ -702,7 +721,6 @@
           `;
         }
 
-        // 4. 圖片 / 語音 / 影片媒體（隱藏檔名）
         const mediaPath = row.asset || (isMediaFilenameText(koRaw) ? koRaw : '');
         if (mediaPath) {
           const lower = String(mediaPath).toLowerCase();
@@ -739,7 +757,6 @@
           `;
         }
 
-        // 5. 一般純文字泡泡訊息
         const showTrans = (userLang !== 'original') && Boolean(zhRaw);
         const transText = convertChinese(zhRaw, userLang);
 
@@ -1057,11 +1074,15 @@
       return String(s || '').replace(/"/g, '&quot;');
     }
 
-    fetch('data.json')
+    // 立刻清空殘留畫面並更新當日標題與星期，避免上一頁殘影
+    document.getElementById('dayTitle').textContent = formatDisplayDate(targetDate);
+    document.getElementById('emojiTabs').innerHTML = '';
+    document.getElementById('dayContent').innerHTML = '';
+
+    fetch('data.json', { cache: 'no-store' })
       .then(r => r.json())
       .then(data => {
         archiveData = data;
-        document.getElementById('dayTitle').textContent = formatDisplayDate(targetDate);
 
         const allDates = new Set();
         ['bubble', 'sns', 'media'].forEach(cat => {
